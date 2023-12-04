@@ -7,6 +7,7 @@ use App\Models\Person;
 use App\Models\Schedule;
 use App\Models\Location;
 use App\Models\Grade;
+use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 use DateInterval;
@@ -125,9 +126,12 @@ class AdmindashboardController extends Controller
             ->with(compact('allLocations', 'occupancyData', 'timeIntervals', 'currentdate', 'clas'));
     }
 
-    public function dataOfWeek(Request $request)
-    {
-        
+    // public function dataOfWeek(Request $request)
+    // {
+    //     $clas = Grade::all()->sortBy(function ($clas) {
+    //         return $clas->class_name;
+    //     });
+    //     $schedules = $this->getSchedules($request);
         // $currentdate =  Carbon::parse($request['userdate'])->format('Y-m-d');
         // //$day =  $currentdate->format('l');
         // $adminclass = Schedule::where('date', '=', $currentdate)
@@ -136,9 +140,107 @@ class AdmindashboardController extends Controller
         //                       ->orderBy('date')
         //                       ->get();
         // return view('admin.classdashboard')->with(compact('adminclass', 'currentdate'));
-        return view('admin.weekschedule');
+    //     return view('admin.weekschedule') ->with(compact('clas', 'schedules'));
 
+    // }
+    public function getSchedules(Request $request)
+{
+    $classId = $request->input('class');
+    $startDate = $request->input('start_date');
+    $endDate = $request->input('end_date');
+
+    $schedules = Schedule::with(['user', 'activity', 'location'])
+        ->where('class_id', $classId)
+        ->whereBetween('date', [$startDate, $endDate])
+
+        ->orderBy('date')
+        ->orderBy('time_from')
+        
+        ->get();
+    $clas = Grade::all()->sortBy(function ($clas) {
+            return $clas->class_name;
+        });
+        $class = Grade::find($classId);
+    
+
+        return view('admin.weekschedule') ->with(compact('clas', 'schedules','class', 'startDate', 'endDate'));
+}
+public function index()
+{
+    $schedules = Schedule::with(['user', 'location'])->get();
+    $users = User::all();
+    $locations = Location::all();
+
+    return view('admin.user_edit_view', compact('schedules', 'users', 'locations'));
+}
+
+public function show($id)
+{
+    $schedule = Schedule::with(['user', 'location'])->find($id);
+    $users = User::all();
+    $locations = Location::all();
+
+    return view('admin.user_edit_view', compact('schedule', 'users', 'locations'));
+}
+public function edit(Request $request, $id)
+{
+    // Retrieve user and location IDs from the request
+    $location_id = $request->input('location_id');
+    $user_id = $request->input('user_id');
+
+    // Check if location_id and user_id are set
+    if ($location_id === null || $user_id === null) {
+        return back()->with('error', 'Location or User not selected');
     }
+
+    // Find the schedule by ID
+    $schedule = Schedule::find($id);
+
+    if (!$schedule) {
+        return back()->with('error', 'Schedule not found');
+    }
+
+    // Find the user by userID
+    $user = User::find($user_id);
+
+    // Check if the user is found
+    if (!$user) {
+        return back()->with('error', 'User not found');
+    }
+
+    // Check if the location is already booked for the specified time frame
+    $startTime = $schedule->time_from;
+    $endTime = $schedule->time_to;
+    $selectedDays = [$schedule->day]; // Assuming day is a single value, change as needed
+
+    $existingSchedules = Schedule::where('location_id', $location_id)
+        ->whereIn('day', $selectedDays)
+        ->where('id', '<>', $id) // Exclude the current schedule from the check
+        ->get();
+
+    foreach ($existingSchedules as $existingSchedule) {
+        if (
+            ($startTime >= $existingSchedule->time_from && $startTime < $existingSchedule->time_to) ||
+            ($endTime > $existingSchedule->time_from && $endTime <= $existingSchedule->time_to) ||
+            ($startTime <= $existingSchedule->time_from && $endTime >= $existingSchedule->time_to)
+        ) {
+            return redirect()->back()->withErrors(['error' => 'Location is already booked for ' . $existingSchedule->user->name . ' at this date and time.']);
+        }
+    }
+
+    // Update the schedule's location_id and user_id
+    $schedule->update(['location_id' => $location_id, 'user_id' => $user->userID]);
+
+    // Reload the updated schedule with the associated user
+    $updatedSchedule = Schedule::with('user')->find($id);
+
+    // Check if the update was successful
+    if ($updatedSchedule) {
+        return back()->with('success', 'Record Updated Successfully')->with('timestamp', now())->with('updatedSchedule', $updatedSchedule);
+    } else {
+        return back()->with('error', 'Error updating record');
+    }
+}
     
     
 

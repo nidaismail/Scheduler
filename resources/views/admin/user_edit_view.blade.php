@@ -23,27 +23,10 @@
     <link href="asset/vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="asset/vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
 
-    <!-- Main CSS-->
-    <link href="asset/css/main.css" rel="stylesheet" media="all">
+    
     <link rel="stylesheet" href="{{ asset('asset/css/main.css') }}">
     <style>
-    textarea {
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  color: grey;
-  font-family: sans-serif;
-}
-      table,  td {
-  border: 2px solid;
-  width: 50%;
-  padding: 15px;
-  text-align: left;
-
-      }
+   
       #alert{
   display: none;
     }
@@ -73,105 +56,122 @@
         margin: 8px 0;
         box-sizing: border-box;
         }
-        input[type=textarea] {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        box-sizing: border-box;
-        }
+      
         body
-         {background-color: #16A796;
+         {background-color: #1BA998;
        
 
 
-  align-content: center;
-}
+    align-content: center;
+    }  .form-group {
+        margin-bottom: 20px;
+    }
+
+    .input-label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    /* Custom styling for dropdowns */
+    .form-control select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        padding-right: 30px; /* Adjust the value based on your design */
+        background: url('path-to-your-arrow-icon.png') no-repeat right center; /* Replace with your arrow icon */
+    }
+    #successMessage .alert-success {
+        background-color: #1BA998;
+        border-color: #ffeeba;
+        color: white;
+    }
+
+    #successMessage .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
         </style>
-       
+    
 </head>
 
 <div class="page-wrapper bg-red p-t-180 p-b-100 font-robo">
-        <div class="wrapper wrapper--w960">
-            <div class="card card-2">
-                <div class="card-heading"></div>
-                <div class="card-body">
-                    <h2 class="title">Update User</h2>
-                    <form action = "/edit/<?php echo $users[0]->id; ?>" method = "post">
-                    <input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
-                        @csrf
+    <div class="wrapper wrapper--w960">
+        <div class="card card-2">
+            <div class="card-heading"></div>
+            <div class="card-body">
+                <h2 class="title">Update</h2>
+                <form action="{{ url('/edit/' . $schedule->id) }}" method="POST">
+                    @csrf
                     <div class="row p-4 justify-content-center" id="successMessage">
+                    @if(session()->has('success') || $errors->any())
+                        <div class="alert {{ $errors->any() ? 'alert-danger' : 'alert-success' }} error-msg">
+                            <i class="{{ $errors->any() ? 'fa fa-exclamation-circle' : 'fa fa-check-circle' }}"></i>
+                            {{ $errors->any() ? 'Error: ' : '' }}
                             @if(session()->has('success'))
-                            <div class="alert alert-success error-msg">
-                                <i class="fa fa-check-circle"></i>
                                 {{ session()->get('success') }}
-                            </div>
+                            @elseif($errors->any())
+                                <ul>
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             @endif
                         </div>
-                        <div class="input-group">
-                        <h5>User Id</h5>
-                        <input class="input--style-2" type = 'text' name = 'userID'
-                         value = '<?php echo$users[0]->userID; ?>'/> 
-                        </div>
-                       
-                        <div class="row row-space">
-                            <div class="col-2"> 
-                            </div>
-                        </div>
-                        <div class="input-group">
-                        <h5>Name</H5>
-                            <div class="rs-select2 js-select-simple select--no-search">
-                            <input class="input--style-2" type = 'text' name = 'name'
-                            value = '<?php echo$users[0]->name; ?>'/>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                        <h5>email</H5>
-                            <div class="rs-select2 js-select-simple select--no-search">
-                            <input  class="input--style-2" type = 'text' name = 'email'
-                            value = '<?php echo$users[0]->email; ?>'/> 
-                            </div>
-                        </div>
-                        <h5>Designation</H5>
-                            <div class="rs-select2 js-select-simple select--no-search">
-                            <input  class="input--style-2" type = 'text' name = 'designation'
-                            value = '<?php echo$users[0]->designation; ?>'/> 
-                            </div>
-                        </div>
-                        <h5>Department ID</H5>
-                            <div class="rs-select2 js-select-simple select--no-search">
-                            <input  class="input--style-2" type = 'text' name = 'dep_id'
-                            value = '<?php echo$users[0]->dep_id; ?>'/> 
-                            </div>
-                        </div>
-						<!-- <div class="input-group"> -->
-                        <!-- <h5>Job Description</H5>
-                            <div class="rs-select2 js-select-simple select--no-search">
-                            <textarea class="input--style-2" name= 'designation' rows="6" cols="10" style="height: auto; resize: vertical; transition: none;"><?php echo $users[0]->designation; ?></textarea>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                        <h5>Eligibilty Criteria</H5>
-                            <div class="rs-select2 js-select-simple select--no-search">
-                            <textarea class="input--style-2" name= 'dep_id'rows="6" cols="10" style="height: auto; resize: vertical; transition: none;"><?php echo $users[0]->dep_id; ?></textarea>
-                           </div>
-                        </div>
-                        <div > -->
-                        <button style="padding: 10px 20px; background-color: #1969b3; color: white; line-height: 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none;"
-                    onmouseover="this.style.backgroundColor='white'; this.style.color='#1969b3'; this.style.border='2px solid #1969b3';"
-                    onmouseout="this.style.backgroundColor='#1969b3'; this.style.color='white'; this.style.border='none';">
-                            Update User
-                        </button>
-                        </div><br>
-                        <button style="padding: 10px 20px; background-color: #1969b3; color: white; line-height: 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none;"
-                    onmouseover="this.style.backgroundColor='white'; this.style.color='#1969b3'; this.style.border='2px solid #1969b3';"
-                    onmouseout="this.style.backgroundColor='#1969b3'; this.style.color='white'; this.style.border='none';">
-                    <span style="margin-right: 5px; font-size: 12px; line-height: 12px;">&#8592;</span> <a  href="{{ route('home') }}">Go Back</a>
-                    </button>
-                    </form>
+                    @endif
                 </div>
+
+                    <div class="form-group">
+                    <label for="user_id" class="input-label">Person</label>
+                    <select id="user_id" class="form-control" name="user_id">
+                        @foreach ($users as $user)
+                            <option value="{{ $user->userID }}" {{ $schedule->user->userID == $user->userID ? 'selected' : '' }}>
+                                {{ $user->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="location_id" class="input-label">Location</label>
+                    <select id="location_id" class="form-control" name="location_id">
+                        @foreach ($locations as $location)
+                            <option value="{{ $location->id }}" {{ $schedule->location->id == $location->id ? 'selected' : '' }}>
+                                {{ $location->location }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                    <br>
+                    <br>
+                    <br>
+                      <div>
+                    <button style="padding: 10px 20px; background-color: #1BA998; color: white; line-height: 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none;">
+                        Update User
+                    </button>
+                    <br>
+                    <br>
+                    <button style="padding: 10px 20px; background-color: #1BA998; color: white; line-height: 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none;">
+                        <span style="margin-right: 5px; font-size: 12px; line-height: 12px;">&#8592;</span> <a href="{{ url('admin') }}">Go Back</a>
+                    </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
+     
     <!-- Jquery JS-->
     <script src="asset/vendor/jquery/jquery.min.js"></script>
     <!-- Vendor JS-->

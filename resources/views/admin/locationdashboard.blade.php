@@ -15,7 +15,7 @@
     <link href="./js/plugins/nucleo/css/nucleo.css" rel="stylesheet" />
     <link href="./js/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
     <!-- CSS Files -->
-    <link href="./css/argon-dashboard.css?v=1.1.2" rel="stylesheet" />
+    <link href="./css/argon-dash.css?v=1.1.2" rel="stylesheet" />
     
     {{-- {{-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> --}}
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>

@@ -45,6 +45,7 @@ Route::get('/', function () {
     Route::get('/classadmin', [App\Http\Controllers\AdmindashboardController::class, 'dataWithclass'])->name('dataWithclass');
     Route::get('/locationadmin', [App\Http\Controllers\AdmindashboardController::class, 'dataWithlocation'])->name('dataWithlocation');
     Route::get('/weekadmin', [App\Http\Controllers\AdmindashboardController::class, 'dataOfWeek'])->name('dataOfWeek');
+    Route::get('/getSchedules', [App\Http\Controllers\AdmindashboardController::class, 'getSchedules'])->name('getSchedules');
     Route::get('/class', [App\Http\Controllers\AdmindashboardController::class, 'dataWithLocation'])->name('class');
     Route::get('/create', [App\Http\Controllers\UserController::class, 'create']);
     // Route::get('/edit', [App\Http\Controllers\UserController::class, 'edit']);
@@ -52,9 +53,9 @@ Route::get('/', function () {
     // Route::get('/destroy/{userID}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
     Route::get('/roles', [App\Http\Controllers\UserController::class, 'main']);
     // Route::get('/update', [App\Http\Controllers\UserController::class, 'update'])->name('update');
-     Route::get('edit-records', [App\Http\Controllers\UserUpdateController::class, 'index']);
-     Route::get('edit/{id}', [App\Http\Controllers\UserUpdateController::class, 'show']);
-     Route::post('edit/{id}', [App\Http\Controllers\UserUpdateController::class, 'edit']);
+    Route::get('edit-records', [App\Http\Controllers\AdmindashboardController::class, 'index']);
+    Route::get('edit/{id}', [App\Http\Controllers\AdmindashboardController::class, 'show']);
+    Route::post('edit/{id}', [App\Http\Controllers\AdmindashboardController::class, 'edit']);
      Route::get('delete-records', [App\Http\Controllers\UserDeleteController::class, 'index']);
      Route::get('delete/{id}', [App\Http\Controllers\UserDeleteController::class, 'destroy']);
         

@@ -25,7 +25,63 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-</head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" /> --}}
+   <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('input[type=date]').change(function () {
+                this.form.submit();
+            });
+        
+            $('.filterable .btn-filter').click(function () {
+                // ... (your existing filter logic)
+            });
+        
+            $('.filterable .filters input').keyup(function (e) {
+                // ... (your existing filter logic)
+            });
+        
+            $('#preview-btn').click(function () {
+                previewTable();
+            });
+        
+            $('#export-btn').click(function () {
+                exportToExcel();
+            });
+        
+            function previewTable() {
+                // Your existing logic for previewing the table
+                // Add any additional preview-related actions here
+                console.log('Table previewed!');
+            }
+        
+            function exportToExcel() {
+                const table = $('.filterable .table')[0];
+                const filterDate = $('#filter_date').val(); // Get the selected date
+        
+                // Create a worksheet
+                const ws = XLSX.utils.table_to_sheet(table);
+        
+                // Add headers to the worksheet
+                const headers = ['Day', 'Time From', 'Time To', 'Person', 'Activity', 'Class', 'Location', 'Remarks'];
+                XLSX.utils.sheet_add_aoa(ws, [headers], { origin: 'A1' });
+        
+                // Add a row with the selected date
+                XLSX.utils.sheet_add_aoa(ws, [['Selected Date: ' + filterDate]], { origin: 'A1' });
+        
+                // Create a new workbook and append the worksheet
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        
+                // Generate XLSX file and save to download
+                XLSX.writeFile(wb, 'exported_data.xlsx');
+            }
+        });
+        </script>
 <script>
 /*
 Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
@@ -81,7 +137,7 @@ $(document).ready(function() {
     });
 });
 </script>
-
+</head>
 <body class="">
     <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
         <div class="container-fluid">
@@ -252,6 +308,9 @@ $(document).ready(function() {
                         <div class="col-md-12">
                             <div class="panel panel-primary filterable">
                                 <div class="panel-heading">
+                                    <div>
+                                        <button id="export-btn" style="background-color: #1BA998; color: #FFFFFF;" class="btn">Export to Excel</button>
+                                    </div>
                                     <div class="col pull-right text-right">
                                         <button class="btn btn-primary btn-sm btn-filter"><span
                                                 class="glyphicon glyphicon-filter"></span> Filter</button>

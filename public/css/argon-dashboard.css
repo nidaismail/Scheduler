@@ -1644,7 +1644,7 @@ pre code {
 
 .table th,
 .table td {
-  /* padding: 1rem; */
+  padding: 1rem;
   vertical-align: top;
   border-top: 1px solid #e9ecef;
 }
@@ -18496,14 +18496,12 @@ textarea[resize="horizontal"] {
 
 .card .table {
   margin-bottom: 0;
-  /* margin-left: 0.8rem;
-  padding-right: 1.8rem; */
 }
 
 .card .table td,
 .card .table th {
-  padding-left: 0.5rem;
-  padding-right: 1rem;
+  /* padding-left: 0.5rem; */
+  padding-right: 2.5rem;
 }
 
 p {

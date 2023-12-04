@@ -369,7 +369,7 @@ $(document).ready(function () {
                         </div>
                         <div class="row justify-content-center given-mar">
                             <div class="col-lg-7">
-                                <dicv class="row">
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="activity">Activity</label>
