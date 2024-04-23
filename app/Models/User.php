@@ -22,7 +22,7 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'userID';
     public $incrementing = false;
-     protected $fillable = [
+    protected $fillable = [
         'userID',
         'name',
         'email',
@@ -57,8 +57,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Department::class);
     }
-    
-   
+    public function resource()
+    {
+        return $this->belongsTo(Resource::class);
+    }
+
+
+
 
     // protected function role(): Attribute{
     //     return new Attribute(
@@ -70,18 +75,18 @@ class User extends Authenticatable
 // {
 //     parent::boot();
 
-//     static::created(function ($user) {
+    //     static::created(function ($user) {
 //         $user->setDefaultRole();
 //     });
 // }
-protected static function boot()
+    protected static function boot()
     {
         parent::boot();
-        
+
         static::created(function ($user) {
             $user->assignRole('user');
         });
     }
-        
-     
+
+
 }

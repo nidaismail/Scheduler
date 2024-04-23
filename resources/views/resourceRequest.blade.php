@@ -196,16 +196,13 @@ $(document).ready(function () {
     </div>
     @endif
 
-    
-    <form class="myform" method="POST" action="{{ route('save') }}" onsubmit="return validate();">
+
+    <form class="myform" method="POST" action="{{ route('saveResource') }}" onsubmit="return validate();">
         @csrf
         <div class="container px-lg-5">
-            
+           
             <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
-                <div style="padding-top: 10px" class="col-md-4 col-sm-12">
-                    <a href="{{ route('requestResource') }}"> <button type="button"
-                            class="btn btn-success rounded-3 justify-content-center">Request a Resource</button></a>
-                </div>
+                <h3>Request a Resource</h3>
                 <div class="content">
                     <div class="container text-left">
                         <div class="row p-4 justify-content-center" id="successMessage">
@@ -431,7 +428,7 @@ $(document).ready(function () {
                                          </div>
                                     </div>
                                   
-                                    <div class="col-md-6 hiddenClass" id="showClass">
+                                                                        <div class="col-md-6 hiddenClass" id="showClass">
                                                             <div class="form-group">
                                                                 <label for="class">Class</label>
                                                                 <div class="dropdown">
@@ -464,7 +461,7 @@ $(document).ready(function () {
                             <div class="col-lg-7 col-md-">
                                 <div class="row">
                                     <div style="padding-top: 10px" class="col-md-4 col-sm-12">
-                                        <a href="{{ route('save') }}" id="schedule-form"> <button type="submit"
+                                        <a href="{{ route('saveResource') }}" id="schedule-form"> <button type="submit"
                                                 class="btn btn-success rounded-3 justify-content-center">Submit
                                             </button></a>
 
@@ -473,10 +470,10 @@ $(document).ready(function () {
                                         <input type="reset" class="btn btn-success rounded-3 justify-content-center "
                                             name="Reset">
                                     </div>
-                                    <div style="padding-top: 10px" class="col-md-4 col-sm-12">
+                                    {{-- <div style="padding-top: 10px" class="col-md-4 col-sm-12">
                                         <a href="{{ route('viewdata') }}"> <button type="button"
                                                 class="btn btn-success rounded-3 justify-content-center">Preview</button></a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -490,25 +487,6 @@ $(document).ready(function () {
 
 
 </div>
-{{-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-              
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-</div>
-@endif
-
-{{ __('You are logged in!') }}
-</div>
-</div>
-</div>
-</div>
-</div> --}}
 @endsection
 @push('script')
 

@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Schedule extends Model
+class Resource extends Model
 {
     use HasFactory;
-    protected $table = "schedule";
+    protected $table = "resource";
     protected $fillable = ['location_id', 'user_id', 'activity_id'];
     public function location()
     {

@@ -27,17 +27,21 @@
         <nav class="navbar navbar-expand-md navbar-light bg-teal shadow-sm">
             <div class="container">
                 @role('admin')
+                
                 <ul class="navbar-nav">
+                    @if (Auth::user()->userID == 2254)
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('/roles')}}" target="_blank">
-                            <i class="ni ni-key-25 text-info"></i> Users
+                        <a class="nav-link" href="{{url('/locationadmin')}}">
+                            <i class="ni ni-key-25 text-info"></i> Dashboard
                         </a>
                     </li>
+                    @else
                     <li class="nav-item">
                         <a class="nav-link " href="{{url('/admin')}}">
                             <i class="ni ni-single-02 text-yellow"></i> Dashboard
                         </a>
                     </li>
+                    @endif
                 </ul>
                 @else
                 <a class="navbar-brand" href="{{ url('/') }}">
