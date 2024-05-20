@@ -159,6 +159,18 @@ $(document).ready(function () {
         };
     });
 
+    // Function to update the button text when a person is selected
+    function updateButtonText() {
+        var selectedPersons = [];
+        // Loop through all checked checkboxes and get their corresponding labels
+        $('.person-item input[type="checkbox"]:checked').each(function () {
+            var label = $(this).siblings('label').text();
+            selectedPersons.push(label);
+        });
+        // Update the button text with the selected persons
+        $('#personsDropdown').text(selectedPersons.join(', ') || 'Select Persons');
+    }
+
     // Search for persons in the dropdown
     $('#personSearch1, #personSearch2').on('input', function () {
         var searchQuery = $(this).val().toLowerCase();
@@ -168,6 +180,13 @@ $(document).ready(function () {
         dropdownContainer.find('.person-item').hide();
         // Find and show .person-item elements containing the search query
         dropdownContainer.find('.person-item:contains("' + searchQuery + '")').show();
+        // Update the button text when searching
+        updateButtonText();
+    });
+
+    // Handle checkbox change event to update button text
+    $('.person-item input[type="checkbox"]').on('change', function () {
+        updateButtonText();
     });
 
     // Search for classes in the dropdown
@@ -182,6 +201,21 @@ $(document).ready(function () {
     });
 });
     
+</script>
+<script>
+    document.getElementById('start_time').addEventListener('change', function() {
+        var selectedTime = this.value;
+        var selectedHour = parseInt(selectedTime.split(':')[0]);
+        var validationMessage = document.getElementById('timeValidationError');
+
+        if (selectedHour < 8) {
+            validationMessage.textContent = 'Time must be between 8 AM and 3 PM.';
+            this.classList.add('is-invalid');
+        } else {
+            validationMessage.textContent = '';
+            this.classList.remove('is-invalid');
+        }
+    });
 </script>
 @endpush
 
@@ -202,10 +236,10 @@ $(document).ready(function () {
         <div class="container px-lg-5">
             
             <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
-                <div style="padding-top: 10px" class="col-md-4 col-sm-12">
+                {{-- <div style="padding-top: 10px" class="col-md-4 col-sm-12">
                     <a href="{{ route('requestResource') }}"> <button type="button"
                             class="btn btn-success rounded-3 justify-content-center">Request a Resource</button></a>
-                </div>
+                </div> --}}
                 <div class="content">
                     <div class="container text-left">
                         <div class="row p-4 justify-content-center" id="successMessage">
@@ -243,114 +277,124 @@ $(document).ready(function () {
                                         </div>
                                     </div>
                                     <div class="col-md-6 removed" id="displayPerson">
-                                <div class="form-group">
-                                    <div class="dropdown">
-                                        <button class="form-control dropdown-toggle" type="button" id="personsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Select Persons
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="personsDropdown">
-                                            @role('admin')
-                                                <input type="text" id="personSearch1" class="form-control" placeholder="Search Persons...">
-                                                @foreach($persons as $person)
-                                                    <div class="form-check person-item">
-                                                        <input type="checkbox" name="persons[]" id="person_{{ $person->userID }}" value="{{ $person->userID }}" class="form-check-input">
-                                                        <label class="form-check-label" for="person_{{ $person->userID }}">{{ $person->name }}</label>
-                                                    </div>
-                                                @endforeach
-                                            @else
-                                                @foreach($persons as $person)
-                                                    <div class="form-check person-item">
-                                                        <input type="checkbox" name="persons[]" id="person_{{ $person->userID }}" value="{{ $person->userID }}" class="form-check-input">
-                                                        <label class="form-check-label" for="person_{{ $person->userID }}">{{ $person->name }}</label>
-                                                    </div>
-                                                @endforeach
-                                        @endrole
+                                        <div class="form-group">
+                                            <div class="dropdown">
+                                                <button class="form-control dropdown-toggle @error('persons') is-invalid @enderror" type="button" id="personsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Select Persons
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="personsDropdown">
+                                                    <input type="text" id="personSearch1" class="form-control" placeholder="Search Persons...">
+                                                    @foreach($persons as $person)
+                                                        <div class="form-check person-item">
+                                                            <input type="checkbox" name="persons[]" id="person_{{ $person->userID }}" value="{{ $person->userID }}" class="form-check-input" @if(old('persons') && in_array($person->userID, old('persons'))) checked @endif>
+                                                            <label class="form-check-label" for="person_{{ $person->userID }}">{{ $person->name }}</label>
                                                         </div>
-                                                    </div>
-                                                    </div>
-                            </div>
-                                                    <div class="col-md-6 removedClass" id="displayClass">
-                            <div class="form-group">
-                                <div class="dropdown">
-                                    <button class="form-control dropdown-toggle" type="button" id="classDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Select Class
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="classDropdown">
-                                        <input type="text" id="classSearch" class="form-control" placeholder="Search Classes...">
-                                        @foreach($clas as $cl)
-                                            <div class="form-check class-item">
-                                                <input type="radio" name="class" id="class_{{ $cl->id }}" value="{{ $cl->id }}" class="form-check-input">
-                                                <label class="form-check-label" for="class_{{ $cl->id }}">{{ $cl->class_name }}</label>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        @endforeach
+                                            @error('persons')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
+                                    
+                                    <div class="col-md-6 removedClass" id="displayClass">
+                                        <div class="form-group">
+                                            <div class="dropdown">
+                                                <button class="form-control dropdown-toggle @error('class') is-invalid @enderror" type="button" id="classDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Select Class
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="classDropdown">
+                                                    <input type="text" id="classSearch" class="form-control" placeholder="Search Classes...">
+                                                    @foreach($clas as $cl)
+                                                        <div class="form-check class-item">
+                                                            <input type="radio" name="class" id="class_{{ $cl->id }}" value="{{ $cl->id }}" class="form-check-input" @if(old('class') == $cl->id) checked @endif>
+                                                            <label class="form-check-label" for="class_{{ $cl->id }}">{{ $cl->class_name }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            @error('class')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    
                                 </div>
-                            </div>
-                        </div>
-                        </div>
-                        </div> 
+                            </div> 
                         <div class="row">
                             <div class="form-group">
                                 <div class="dowPicker">
                                     <div class="dowPickerOption">
-                                        <input type="checkbox" id="dow1" name="day[]" value="Sunday">
+                                        <input type="checkbox" id="dow1" name="day[]" value="Sunday" class="@error('day') is-invalid @enderror" @if(old('day') && in_array('Sunday', old('day'))) checked @endif>
                                         <label for="dow1">Sun</label>
                                     </div>
                                     <div class="dowPickerOption">
-                                        <input type="checkbox" id="dow2" name="day[]" value="Monday">
+                                        <input type="checkbox" id="dow2" name="day[]" value="Monday" class="@error('day') is-invalid @enderror" @if(old('day') && in_array('Monday', old('day'))) checked @endif>
                                         <label for="dow2">Mon</label>
                                     </div>
                                     <div class="dowPickerOption">
-                                        <input type="checkbox" id="dow3" name="day[]" value="Tuesday">
+                                        <input type="checkbox" id="dow3" name="day[]" value="Tuesday" class="@error('day') is-invalid @enderror" @if(old('day') && in_array('Tuesday', old('day'))) checked @endif>
                                         <label for="dow3">Tue</label>
                                     </div>
                                     <div class="dowPickerOption">
-                                        <input type="checkbox" id="dow4" name="day[]" value="Wednesday">
+                                        <input type="checkbox" id="dow4" name="day[]" value="Wednesday" class="@error('day') is-invalid @enderror" @if(old('day') && in_array('Wednesday', old('day'))) checked @endif>
                                         <label for="dow4">Wed</label>
                                     </div>
                                     <div class="dowPickerOption">
-                                        <input type="checkbox" id="dow5" name="day[]" value="Thursday">
+                                        <input type="checkbox" id="dow5" name="day[]" value="Thursday" class="@error('day') is-invalid @enderror" @if(old('day') && in_array('Thursday', old('day'))) checked @endif>
                                         <label for="dow5">Thur</label>
                                     </div>
                                     <div class="dowPickerOption">
-                                        <input type="checkbox" id="dow6" name="day[]" value="Friday">
+                                        <input type="checkbox" id="dow6" name="day[]" value="Friday" class="@error('day') is-invalid @enderror" @if(old('day') && in_array('Friday', old('day'))) checked @endif>
                                         <label for="dow6">Fri</label>
                                     </div>
                                     <div class="dowPickerOption">
-                                        <input type="checkbox" id="dow7" name="day[]" value="Saturday">
+                                        <input type="checkbox" id="dow7" name="day[]" value="Saturday" class="@error('day') is-invalid @enderror" @if(old('day') && in_array('Saturday', old('day'))) checked @endif>
                                         <label for="dow7">Sat</label>
                                     </div>
                                 </div>
+                                @error('day')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
-
                         <div class="row justify-content-center given-mar">
                             <div class="col-lg-7">
                                 <div action="#" class="row">
                                     <div class="col-md-6">
-                                       <div class="form-group">
-                                        <label for="input_from">Date From</label>
+                                        <div class="form-group">
+                                            <label for="input_from">Date From</label>
                                             <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
-                                                name="start_date" class="form-control" id="start_date" placeholder=""
-                                                required value="<?php echo date('Y-m-d', strtotime('2024-01-01')); ?>">
+                                                   name="start_date" class="form-control" id="start_date" placeholder=""
+                                                   required value="{{ old('start_date', date('Y-m-d')) }}">
                                         </div>
-
-                                    </div>
+ 
+                                     </div>
                                     {{-- @php
                                     $today = \Carbon\Carbon::now(); //Current Date and Time
                                    $lastDayofMonth =    \Carbon\Carbon::parse($today)->endOfMonth()->toDateString();
                                    dd($lastDayofMonth);
                                    @endphp --}}
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="input_to">Date To</label>
-                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY"
-                                            name="end_date" class="form-control" id="end_date"
-                                             placeholder="End Date" required
-                                                 value="<?php echo date('Y-m-d', strtotime('2024-06-30')); ?>">
-                                            </div>
+                                   <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="input_to">Date To</label>
+                                        @php
+                                            // Get the current year and month
+                                            $currentYear = date('Y');
+                                            $currentMonth = date('m');
+                                            
+                                            // Calculate the end date of the current month
+                                            $endOfMonth = date('Y-m-t', strtotime("$currentYear-$currentMonth-01"));
+                                        @endphp
+                                        <input type="date" data-date="" data-date-format="DD MMMM YYYY"
+                                               name="end_date" class="form-control" id="end_date"
+                                               placeholder="End Date" required
+                                               value="{{ old('end_date', $endOfMonth) }}">
                                     </div>
+                                    
                                 </div>
+                                
                             </div>
                         </div>
                         <div class="row justify-content-center given-mar">
@@ -359,17 +403,22 @@ $(document).ready(function () {
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="input_from">Time From</label>
-                                            <input type="time" name="start_time" class="form-control"
-                                                id="start_time" value="08:00" required>
+                                            <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror" id="start_time" value="{{ old('start_time', '08:00') }}" required>
+                                            @error('start_time')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="input_to">Time To</label>
-                                            <input type="time" name="end_time" class="form-control"
-                                                id="end_time" value="16:00" required>
+                                            <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror" id="end_time" value="{{ old('end_time', '15:00') }}" required>
+                                            @error('end_time')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -379,84 +428,93 @@ $(document).ready(function () {
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="activity">Activity</label>
-                                            <select name="activity" id="" class="form-control" id="activity" required>
-                                                <option value="" disabled selected>Select Activity</option>
+                                            <select name="activity" id="activity" class="form-control @error('activity') is-invalid @enderror" required>
+                                                <option value="" disabled>Select Activity</option>
                                                 @foreach($activities as $act)
-                                                <option value='{{$act->id}}'>{{$act->activity_name}}</option>
-
+                                                    <option value="{{$act->id}}" @if($act->id == old('activity', $defaultActivityId)) selected @endif>{{$act->activity_name}}</option>
                                                 @endforeach
                                             </select>
+                                            @error('activity')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
+                                        
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="location">Location</label>
-                                            <select name="location" id="location" class="form-control" required>
+                                            <select name="location" id="location" class="form-control @error('location') is-invalid @enderror" required>
                                                 <option value="" disabled selected>Select Location</option>
                                                 @foreach($locations as $loc)
-                                                <option value='{{$loc->id}}'>{{$loc->location}}</option>
+                                                    <option value='{{$loc->id}}' {{ old('location') == $loc->id ? 'selected' : '' }}>{{$loc->location}}</option>
                                                 @endforeach
                                             </select>
+                                            @error('location')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
+                                        
                                     </div>
                                     <br>
                                     <br>
 
                                     <div class="col-md-6 hidden" id="showPerson">
-                                    <label for="Persons[]">Person</label>
-                                    <div class="form-group">
+                                        <label for="persons[]">Person</label>
+                                        <div class="form-group">
                                             <div class="dropdown">
                                                 <button class="form-control dropdown-toggle" type="button" id="personsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Select Persons
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="personsDropdown">
-                                                    @role('admin')
-                                                        <input type="text" id="personSearch2" class="form-control" placeholder="Search Persons...">
-                                                        @foreach($persons as $person)
-                                                            <div class="form-check person-item">
-                                                                <input type="checkbox" name="persons[]" id="person_{{ $person->userID }}" value="{{ $person->userID }}" class="form-check-input">
-                                                                <label class="form-check-label" for="person_{{ $person->userID }}">{{ $person->name }}</label>
-                                                            </div>
-                                                        @endforeach
-                                                    @else
-                                                        @foreach($persons as $person)
-                                                            <div class="form-check person-item">
-                                                                <input type="checkbox" name="persons[]" id="person_{{ $person->userID }}" value="{{ $person->userID }}" class="form-check-input">
-                                                                <label class="form-check-label" for="person_{{ $person->userID }}">{{ $person->name }}</label>
-                                                            </div>
-                                                        @endforeach
-                                                    @endrole
+                                                    <input type="text" id="personSearch2" class="form-control" placeholder="Search Persons...">
+                                                    @foreach($persons as $person)
+                                                        <div class="form-check person-item">
+                                                            <input type="checkbox" name="persons[]" id="person_{{ $person->userID }}" value="{{ $person->userID }}" class="form-check-input" {{ in_array($person->userID, old('persons', [])) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="person_{{ $person->userID }}">{{ $person->name }}</label>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
-                                         </div>
+                                            @error('persons')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
+                                    
                                   
                                     <div class="col-md-6 hiddenClass" id="showClass">
-                                                            <div class="form-group">
-                                                                <label for="class">Class</label>
-                                                                <div class="dropdown">
-                                                                    <button class="form-control dropdown-toggle" type="button" id="classDropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                        Select Class
-                                                                    </button>
-                                                                    <div class="dropdown-menu" aria-labelledby="classDropdown2">
-                                                                        <input type="text" id="classSearch2" class="form-control" placeholder="Search Classes...">
-                                                                        @foreach($clas as $cl)
-                                                                            <div class="form-check class-item2">
-                                                                                <input type="radio" name="class" id="class_{{ $cl->id }}" value="{{ $cl->id }}" class="form-check-input">
-                                                                                <label class="form-check-label" for="class_{{ $cl->id }}">{{ $cl->class_name }}</label>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                        <label for="class">Class</label>
+                                        <div class="form-group">
+                                            <div class="dropdown">
+                                                <button class="form-control dropdown-toggle" type="button" id="classDropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Select Class
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="classDropdown2">
+                                                    <input type="text" id="classSearch2" class="form-control" placeholder="Search Classes...">
+                                                    @foreach($clas as $cl)
+                                                        <div class="form-check class-item2">
+                                                            <input type="radio" name="class" id="class_{{ $cl->id }}" value="{{ $cl->id }}" class="form-check-input" {{ old('class') == $cl->id ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="class_{{ $cl->id }}">{{ $cl->class_name }}</label>
                                                         </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            @error('class')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="remarks">Remarks</label>
-                                            <input type="text" name="remarks" id="" class="form-control" required>
+                                            <input type="text" name="remarks" id="remarks" class="form-control @error('remarks') is-invalid @enderror" value="{{ old('remarks') }}" required>
+                                            @error('remarks')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
-                                 
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -509,8 +567,29 @@ $(document).ready(function () {
 </div>
 </div>
 </div> --}}
+
 @endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#start_time').change(function() {
+                console.log('Time selected:', $(this).val());
+                var selectedTime = $(this).val();
+                var selectedHour = parseInt(selectedTime.split(':')[0]);
+                var validationMessage = $('#timeValidationError');
+
+                if (selectedHour < 8) {
+                    validationMessage.text('Time must be between 8 AM and 3 PM.');
+                    $(this).addClass('is-invalid');
+                } else {
+                    validationMessage.text('');
+                    $(this).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
 @push('script')
+
 
 @endpush
 
@@ -625,4 +704,6 @@ $(document).ready(function() {
 
 });
 </script>
+
+
 @endprepend

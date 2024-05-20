@@ -178,7 +178,7 @@
                     @endforeach
                     </select>
                 </div> 
-                @if (Auth::user()->userID == 2558)
+                @if (in_array(Auth::user()->userID, [2558, 188]))
                 <div class="input-group">
                     <h5>Date</h5>
                     <div class="rs-select2 js-select-simple select--no-search">
@@ -203,20 +203,7 @@
                                 <input class="input--style-2" type='time' name='time_to' value='{{ $schedule->time_to }}' />
                             </div>
                         </div>
-                       
-                    
                  
-                
-                 <div class="form-group">
-                    <label for="department" class="input-label">Department</label>
-                    <select id="department" class="form-control" name="department">
-                        @foreach ($departments as $department)
-                            <option value="{{ $department->id }}" {{ $schedule->department == $department->id ? 'selected' : '' }}>
-                                {{ $department->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
                 <div class="form-group">
                     <label for="class_id" class="input-label">Class</label>
                     <select id="class_id" class="form-control" name="class_id">
@@ -245,7 +232,7 @@
                     <br>
                     <br>
                     <button style="padding: 10px 20px; background-color: #1BA998; color: white; line-height: 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none;">
-                        <span style="margin-right: 5px; font-size: 12px; line-height: 12px;">&#8592;</span> <a href="{{ url('admin') }}">Go Back</a>
+                        <span style="margin-right: 5px; font-size: 12px; line-height: 12px;">&#8592;</span> <a href="{{ url('/modify') }}">Go Back</a>
                     </button>
                     </div>
                 </form>

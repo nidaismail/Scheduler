@@ -177,7 +177,7 @@
         </nav>
         <!-- End Navbar -->
         <!-- Header -->
-        <div class="header bg-gradient-primary pb-1 pt-5 pt-md-8">
+        <div class="header bg-gradient-primary pb-1 pt-1 pt-md-8">
             
         </div>
         <div class="container-fluid mt--7">
@@ -205,7 +205,7 @@
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="input_from" style="color: grey; font-size: 16px;  font-weight: bold; text-transform: uppercase;">Date From</label>
-                                                                    <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
+                                                                    <input type="date" style="top: 70%;" data-date="" data-date-format="DD MMMM YYYY" min="0"
                                                                         name="start_date" class="form-control" id="start_date" placeholder="" style=""
                                                                         required value="<?php echo date('Y-m-d'); ?>">
                                                                 </div>
@@ -214,7 +214,7 @@
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="input_to" style="color: grey;  font-size: 16px; padding-left:14px; font-weight: bold; text-transform: uppercase;">Date To</label>
-                                                                    <input type="date" data-date="" data-date-format="DD MMMM YYYY"
+                                                                    <input type="date" style="top: 70%;" data-date="" data-date-format="DD MMMM YYYY"
                                                                         name="end_date" class="form-control" id="end_date"
                                                                         placeholder="End Date" required
                                                                         value="<?php echo date('Y-m-t', strtotime('0 months')); ?>">

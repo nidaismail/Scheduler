@@ -49,6 +49,14 @@
         });
     });
 </script>
+<style>
+    @media only screen and (max-width: 768px) {
+    .signin-image{
+        display: none;
+    }
+  /* Your CSS styles for mobile devices */
+}
+</style>
 @endpush
  
 @section('content')

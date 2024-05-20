@@ -55,13 +55,20 @@ Route::middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
     Route::get('/show/{userID}', [App\Http\Controllers\UserController::class, 'show']);
     // Route::get('/destroy/{userID}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
     Route::get('/roles', [App\Http\Controllers\UserController::class, 'main']);
-    // Route::get('/update', [App\Http\Controllers\UserController::class, 'update'])->name('update');
+    Route::get('/mutable', [App\Http\Controllers\MutableController::class, 'mute'])->name('mutable');
+
+    Route::get('/modify', [App\Http\Controllers\AdmindashboardController::class, 'dataWithdates']);
     Route::get('edit-records', [App\Http\Controllers\AdmindashboardController::class, 'index']);
     Route::get('edit/{id}', [App\Http\Controllers\AdmindashboardController::class, 'show']);
     Route::post('edit/{id}', [App\Http\Controllers\AdmindashboardController::class, 'edit']);
     Route::get('delete-records', [App\Http\Controllers\UserdashboardController::class, 'index']);
     Route::delete('delete/{ids}', [App\Http\Controllers\UserdashboardController::class, 'deleteRecords'])->name('delete');
     Route::get('/otherFunctionality', [App\Http\Controllers\UserController::class, 'otherFunctionality'])->name('otherFunctionality');
+
+    // Route::get('/edit-schedules', [App\Http\Controllers\MutableController::class, 'editSelected']);
+    // Route::put('/update-schedule/{id}', [App\Http\Controllers\MutableController::class, 'update'])->name('update-schedule');
+    Route::post('/updateSchedules', [App\Http\Controllers\MutableController::class, 'updateSchedules']);
+
 
 });
 Route::group(['middleware' => ['auth']], function () {

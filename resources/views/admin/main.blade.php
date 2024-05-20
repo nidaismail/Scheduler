@@ -69,6 +69,9 @@
 </script>
 <body class="">
   <style>
+    .form-group {
+    margin-bottom: 0rem;
+    }
        .dropdown-menu {
         max-height: 200px; /* Set max height to enable scrolling */
         overflow-y: auto; /* Enable vertical scrollbar */
@@ -107,7 +110,7 @@
     .table-wrapper {
     overflow-x: auto; /* Enable horizontal scrolling */
     max-width: 100%; /* Ensure the table wrapper doesn't overflow */
-    max-height: 600px;
+    max-height: 500px;
     overflow-y: auto;
 }
 
@@ -244,7 +247,7 @@
         </nav>
         <!-- End Navbar -->
         <!-- Header -->
-        <div class="header bg-gradient-primary pb-1 pt-5 pt-md-8">
+        <div class="header bg-gradient-primary pb-1 pt-1 pt-md-8">
             <div class="container-fluid">
                
             </div>
@@ -270,9 +273,9 @@
                                     <div class="content">
                                         <div class="container text-left">
                                             <div class="row justify-content-center given-mar">
-                                                <div class="col-lg-10">
+                                                <div class="col-lg-12">
                                                     <div class="row">
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <label for="input_from" style="color: grey; font-size: 16px;  font-weight: bold; text-transform: uppercase;">Date From</label>
                                                                     <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
@@ -280,8 +283,8 @@
                                                                         required value="<?php echo date('Y-m-d'); ?>">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-2"></div>
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-1"></div>
+                                                            <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <label for="input_to" style="color: grey;  font-size: 16px; padding-left:14px; font-weight: bold; text-transform: uppercase;">Date To</label>
                                                                     <input type="date" data-date="" data-date-format="DD MMMM YYYY"
@@ -290,29 +293,37 @@
                                                                         value="<?php echo date('Y-m-t', strtotime('0 months')); ?>">
                                                                 </div>
                                                             </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-4" style="padding-left: 0rem; "> 
-                                                            <div class="form-group">
-                                                            <div class="dropdown">
-                                                            <button class="btn btn-success form-control dropdown-toggle btn-block" type="button" id="locationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 1.8rem;">
-                                                                 Select location
-                                                            </button>
-                                                            <div class="dropdown-menu" aria-labelledby="locationDropdown" >
-                                                                <input type="text" id="locationSearch" class="form-control" placeholder="Search Locations...">
-                                                                @foreach($locations as $location)
-                                                                    <div class="form-check location-item">
-                                                                        <input type="radio" name="location" id="location_{{ $location->id }}" value="{{ $location->id }}" class="form-check-input me-2">
-                                                                        <label class="form-check-label" for="location_{{ $location->id }}">{{ $location->location }}</label>
+                                                            <div class="col-md-1"></div>
+                                                            <div class="col-md-2">
+                                                                <div style="padding-left: 0rem; "> 
+                                                                    <div class="form-group">
+                                                                    <div class="dropdown">
+                                                                        
+                                                                    <button class="btn btn-success form-control dropdown-toggle btn-block loc" type="button" id="locationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 1.8rem;">
+                                                                         Select location
+                                                                    </button>
+                                                                        
+                                                                    <div class="dropdown-menu" aria-labelledby="locationDropdown" >
+                                                                        <input type="text" id="locationSearch" class="form-control" placeholder="Search Locations...">
+                                                                        @foreach($locations as $location)
+                                                                            <div class="form-check location-item">
+                                                                                <input type="radio" name="location" id="location_{{ $location->id }}" value="{{ $location->id }}" class="form-check-input me-2">
+                                                                                <label class="form-check-label" for="location_{{ $location->id }}">{{ $location->location }}</label>
+                                                                            </div>
+                                                                        @endforeach
                                                                     </div>
-                                                                @endforeach
+                                                                </div>
+        
+                                                                   
+                                                                    </div>
+                                                                </div>
                                                             </div>
-
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <button type="submit" class="btn btn-success rounded-3  btn-block" style="margin-top: 1.8rem ; margin-left: 3.8rem;">Get Schedules</button>
+                                                            <div class="col-md-1"></div>
+                                                            <div class="col-md-3">
+                                                                
+                                                                
+                                                                <button type="submit" class="btn btn-success rounded-3  btn-block getButton" style="margin-top: 1.8rem ;">Get Schedules</button>
+                                                            
                                                             </div>
                                                     </div>
                                                 </div>

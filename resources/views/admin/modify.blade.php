@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>
-      Class Activity Dashboard
+      Person Activity Dashboard
     </title>
     
     <!-- Favicon -->
@@ -32,56 +32,77 @@
    <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('input[type=date]').change(function () {
-                this.form.submit();
-            });
-        
-            $('.filterable .btn-filter').click(function () {
-                // ... (your existing filter logic)
-            });
-        
-            $('.filterable .filters input').keyup(function (e) {
-                // ... (your existing filter logic)
-            });
-        
-            $('#preview-btn').click(function () {
-                previewTable();
-            });
-        
-            $('#export-btn').click(function () {
-                exportToExcel();
-            });
-        
-            function previewTable() {
-                // Your existing logic for previewing the table
-                // Add any additional preview-related actions here
-                console.log('Table previewed!');
-            }
-        
-            function exportToExcel() {
-                const table = $('.filterable .table')[0];
-                const filterDate = $('#filter_date').val(); // Get the selected date
-        
-                // Create a worksheet
-                const ws = XLSX.utils.table_to_sheet(table);
-        
-                // Add headers to the worksheet
-                const headers = ['Day', 'Time From', 'Time To', 'Person', 'Activity', 'Class', 'Location', 'Remarks'];
-                XLSX.utils.sheet_add_aoa(ws, [headers], { origin: 'A1' });
-        
-                // Add a row with the selected date
-                XLSX.utils.sheet_add_aoa(ws, [['Selected Date: ' + filterDate]], { origin: 'A1' });
-        
-                // Create a new workbook and append the worksheet
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        
-                // Generate XLSX file and save to download
-                XLSX.writeFile(wb, 'exported_data.xlsx');
+      $(document).ready(function () {
+          $('input[type=date]').change(function () {
+              this.form.submit();
+          });
+      
+          $('.filterable .btn-filter').click(function () {
+              // ... (your existing filter logic)
+          });
+      
+          $('.filterable .filters input').keyup(function (e) {
+              // ... (your existing filter logic)
+          });
+      
+          $('#preview-btn').click(function () {
+              previewTable();
+          });
+          $('#export-btn').click(function () {
+            const table = $('.filterable .table')[0];
+            const filterDate = $('#filter_date').val(); // Get the selected date
+
+            // Check if there are rows in the table
+            if ($(table).find('tbody tr').length > 0) {
+                exportToExcel(table, filterDate);
+            } else {
+                // Show an alert when there's no data to export
+                alert('No data available in the table for export.');
             }
         });
-        </script>
+
+        function formatDateString(dateString) {
+            const dateParts = dateString.split('-'); // Assuming date is in yyyy-mm-dd format
+            const formattedDate = dateParts[2] + dateParts[1] + dateParts[0]; // Format to ddmmyyyy
+            return formattedDate;
+        }
+
+        function exportToExcel(table, filterDate) {
+            const headers = ['Day', 'Time From', 'Time To', 'Person', 'Activity', 'Class', 'Location', 'Remarks'];
+
+            // Remove the "Action" header from headers
+            const actionIndex = headers.indexOf('Action');
+            if (actionIndex !== -1) {
+                headers.splice(actionIndex, 1);
+            }
+
+            const dataRows = [];
+            $('.filterable .table tbody tr').each(function () {
+                const rowData = [];
+                $(this).find('td:not(:last-child)').each(function () { // Exclude last td (Action column)
+                    rowData.push($(this).text());
+                });
+                dataRows.push(rowData);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet([headers].concat(dataRows));
+
+            // Format date as ddmmyyyy for sheet name
+            const formattedDate = formatDateString(filterDate);
+            const sheetName = 'Timetable_' + formattedDate; // Set the customized sheet name
+
+            // Set font size
+            ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 20 }, { wch: 20 }];
+
+            XLSX.utils.sheet_add_aoa(ws, [['Selected Date: ' + filterDate]], { origin: 'A1' });
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, sheetName); // Set the customized sheet name
+            XLSX.writeFile(wb, sheetName + '.xlsx'); // Set the filename with the customized sheet name
+        }
+    });
+</script>
+
 <script>
 /*
 Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
@@ -139,97 +160,93 @@ $(document).ready(function() {
 </script>
 </head>
 <body class="">
-    <style>
-        .btn-custom {
-        background-color: #16A796;
-        color: #fff; /* Optionally, change text color to white */
-    }
-    .btn-custom:hover {
-        color: #575151; /* Change text color to white on hover */
-    }
-    .table-container {
-    max-height: 550px; /* Adjust the height as needed */
-    overflow-y: auto; /* Vertical scroll */
-    position: relative;
+  <style>
+    .btn-custom {
+    background-color: #16A796;
+    color: #fff; /* Optionally, change text color to white */
 }
-      </style>
-      <header class="navbar navbar-expand-md navbar-light bg-white">
-        <div class="container-fluid">
-            <!-- Toggler -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main"
-                aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Brand -->
-            <a class="navbar-brand pt-0" href="https://www.anth.pk/" target="_blank">
-                <img src="./images/brand/CIRS.png" class="navbar-brand-img" alt="...">
-            </a>
-            <!-- User or any other elements you want -->
-            <!-- ... -->
-        </div>
-        <!-- Collapse content -->
-        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-            <!-- Collapse header -->
-            <div class="navbar-collapse-header d-md-none">
-                <div class="row">
-                    <div class="col-6 collapse-brand">
-                        <a href="https://www.anth.pk/" target="_blank">
-                            <img src="./images/brand/CIRS.png">
-                        </a>
-                    </div>
-                    <div class="col-6 collapse-close">
-                        <button type="button" class="navbar-toggler" data-toggle="collapse"
-                            data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false"
-                            aria-label="Toggle sidenav">
-                            <span></span>
-                            <span></span>
-                        </button>
-                    </div>
+.btn-custom:hover {
+    color: #575151; /* Change text color to white on hover */
+}
+  </style>
+  <header class="navbar navbar-expand-md navbar-light bg-white">
+    <div class="container-fluid">
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main"
+            aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Brand -->
+        <a class="navbar-brand pt-0" href="https://www.anth.pk/" target="_blank">
+            <img src="./images/brand/CIRS.png" class="navbar-brand-img" alt="...">
+        </a>
+        <!-- User or any other elements you want -->
+        <!-- ... -->
+    </div>
+    <!-- Collapse content -->
+    <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+        <!-- Collapse header -->
+        <div class="navbar-collapse-header d-md-none">
+            <div class="row">
+                <div class="col-6 collapse-brand">
+                    <a href="https://www.anth.pk/" target="_blank">
+                        <img src="./images/brand/CIRS.png">
+                    </a>
+                </div>
+                <div class="col-6 collapse-close">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse"
+                        data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false"
+                        aria-label="Toggle sidenav">
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
             </div>
-            
-            <div class="d-flex">
-                <a class="btn btn-custom" href="{{url('/home')}}">
-                    <i class="ni ni-single-02 text-yellow"></i> Home
-                </a>
-                <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i> Campus Activity
-                </a>
-                <a class="btn btn-custom mr-2" href=" {{url('/roles')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i> Locations Activity
-                </a>
-                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i> Person Activity
-                </a>
-                {{-- <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i> Class Activity
-                </a> --}}
-                <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i>Monthly Schedule
-                </a>
-               
-                
-            </div>
-    
-    
-    
         </div>
-    </header>
+        
+        <div class="d-flex">
+            <a class="btn btn-custom" href="{{url('/home')}}">
+                <i class="ni ni-single-02 text-yellow"></i> Home
+            </a>
+            {{-- <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i> Person Activity
+            </a> --}}
+            <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i> Campus Activity
+            </a>
+            <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i> Class Activity
+            </a>
+            
+            <a class="btn btn-custom mr-2" href=" {{url('/roles')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i> Location Activity
+            </a>
+            <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i>Monthly Schedule
+            </a>
+            
+        </div>
+
+
+
+    </div>
+</header>
+
     <div class="main-content">
         <!-- Navbar -->
         <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
             <div class="container-fluid">
                 <!-- Brand -->
                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-                    href="{{url('/admin')}}">Class Activity Dashboard</a>
-                
+                    href="{{url('/admin')}}">Person Activity Dashboard</a>
+              
             </div>
         </nav>
         <!-- End Navbar -->
         <!-- Header -->
-        <div class="header bg-gradient-primary pb-1 pt-1 pt-md-8">
+        <div class="header bg-gradient-primary pb-5 pt-5 pt-md-8">
             <div class="container-fluid">
-               
+            
             </div>
         </div>
         
@@ -239,13 +256,7 @@ $(document).ready(function() {
                     <div class="card shadow">
                         <div class="card-header border-0">
                             <div class="row align-items-center">
-                                <div class="col-md-4 text-center"> <div>
-                                    <button id="export-btn" style="background-color: #1BA998; color: #FFFFFF;" class="btn">Export to Excel</button>
-                                </div></div>
-                                <div class="col-md-4 text-center">
-                                    
-                                
-                               
+                                <div class="col-md-12 text-center">
                                 <div class="divs">
                                     <form method="GET" id="filter_form">
                                       @php
@@ -264,60 +275,52 @@ $(document).ready(function() {
                         <div class="col-md-12">
                             <div class="panel panel-primary filterable">
                                 <div class="panel-heading">
-                                    
+                                  <div>
+                                    <button id="export-btn" style="background-color: #1BA998; color: #FFFFFF;" class="btn">Export to Excel</button>
+                                </div>
                                     <div class="col pull-right text-right">
+                                  
                                         <button class="btn btn-primary btn-sm btn-filter"><span
                                                 class="glyphicon glyphicon-filter"></span> Filter</button>
                                     </div>
                                     
                                     <h3 class="mb-10 panel-title"></h3>
                                 </div>
-                                <div class="table-container">
+                                
                                 <table  class=" table table-bordered table-responsive" >
                                     <thead>
                                         <tr class="filters">
                                             {{-- <th><input type="text" class="form-control" placeholder="Date" disabled></th> --}}
-                                            <th><input type="text" class="form-control" placeholder="Class" disabled></th>
                                             <th><b><input type="text" class="form-control" placeholder="Day" disabled></b></th>
                                             <th><input type="text" class="form-control" placeholder="Time From"disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Time To" disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Person" disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Activity" disabled></th>
-                                            
+                                            <th><input type="text" class="form-control" placeholder="Class" disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Location" disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Remarks" disabled></th>
+                                            <th><input type="text" class="form-control" placeholder="Action" disabled></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $groupedData = $adminclass->groupBy(function ($item) {
-                                            return $item->date . $item->time_from . $item->time_to . $item->location . $item->activity . $item->remarks;
-                                            });
-                                        @endphp
-                                        @foreach ($groupedData as $group)
+                                        @foreach ($admindata as $data)
                                         <tr>
-                                            <!-- {{-- <td>{{ \Carbon\Carbon::parse($data->date)->format('d F, Y') }}</td> --}} -->
-                                            <td>{{ $group[0]->class->class_name }}</td>
-                                            <!-- <td>{{ \Carbon\Carbon::parse($group[0]->date)->format('d F, Y') }}</td> -->
-                                            <td>{{ $group[0]->day }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($group[0]->time_from)->format('h:i A') }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($group[0]->time_to)->format('h:i A') }}</td>
+                                            {{-- <td>{{ \Carbon\Carbon::parse($data->date)->format('d F, Y') }}</td> --}}
+                                            <td>{{$data->day}}</td>
+                                            <td>{{ \Carbon\Carbon::parse($data->time_from)->format('h:i A') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($data->time_to)->format('h:i A') }}</td>
+                                            <td>{{$data->user->name}} </td>
+                                            <td>{{$data->activity->activity_name}} </td>
+                                            <td>{{$data->class->class_name}} </td>
+                                            <td>{{$data->location->location}} </td>
+                                            <td>{{$data->remarks}}</td>
                                             <td>
-                                                @foreach ($group as $data)
-                                                    {{ $data->user->name }}
-                                                        @if (!$loop->last)
-                                                            <br>
-                                                        @endif
-                                                @endforeach
+                                              <a style="background-color: #1BA998; color: #fff;" href="edit/{{ $data->id }}" class="btn edit-button"><span class="edit-icon">&#9998;</span></a>
                                             </td>
-                                            <td>{{ $group[0]->activity->activity_name }}</td>
-                                            <td>{{ $group[0]->location->location }}</td>
-                                            <td>{{ $group[0]->remarks }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                </div>
                                 <!-- classtable -->
                                 
                             </div>

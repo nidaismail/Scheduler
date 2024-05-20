@@ -318,7 +318,27 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if(isset($_GET['classSelection']) && isset($_GET['start_date']) && isset($_GET['end_date']))
+                                    @php
+                                        $selectedClassId = $_GET['classSelection']; // Retrieve the selected location ID from URL parameter
+                                        // Assuming $locations is the collection/array of all locations
+                                        $selectedClass = $classes->firstWhere('id', $selectedClassId); // Find the selected location by ID
+                                        $startDate = $_GET['start_date'];
+                                        $endDate = $_GET['end_date'];
+                                    @endphp
+                                
+                                    <div class="schedule-header">
+                                        @if($selectedClass)
+                                            <p style="text-align: center; margin:1rem;">
+                                                <span style="font-weight: bold;">
+                                                    Schedules for <span style="color:#2DCE89;"> {{ $selectedClass->class_name }}</span> 
+                                                    From <span style="color:#2DCE89;">{{ date('d-m-Y', strtotime($startDate)) }} </span> To <span style="color:#2DCE89;">{{ date('d-m-Y', strtotime($endDate)) }}
+                                                </span>
+                                            </p>
+                                        @endif
+                                        @endif
                                 </form>
+
 
                                 <table class="table table-bordered table-responsive" id="persontable">
                                     <div id="messageContainer"></div>
@@ -382,15 +402,15 @@
                                                 </tr>
                                             @endforeach
                                             @else
-                    <!-- Display a message if no data available -->
-                    <tr>
-                        <td colspan="10" class="text-center">No data available</td>
-                    </tr>
-                @endif
-                                        </tbody>
-                                    </table>
-                                    <button id="deleteSelectedButton" class="btn btn-danger">Delete Selected</button>
-                                    </div>
+                                            <!-- Display a message if no data available -->
+                                            <tr>
+                                                <td colspan="10" class="text-center">No data available</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                                <button id="deleteSelectedButton" class="btn btn-danger">Delete Selected</button>
+                            </div>
                                 </div>
                             </div>   
                         </div>

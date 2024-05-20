@@ -13,6 +13,7 @@ class ResourceCreated extends Mailable
 {
     use Queueable, SerializesModels;
     public $requestData;
+    public $persons;
     /**
      * Create a new message instance.
      *
@@ -32,7 +33,7 @@ class ResourceCreated extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Resource Created',
+            subject: 'Resource Requested',
         );
     }
 

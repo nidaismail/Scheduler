@@ -55,7 +55,12 @@
         });
     });
 </script>
-
+<script>
+    function showTooltip() {
+        var paragraph = document.getElementById("tooltip-paragraph");
+        paragraph.classList.toggle("show-tooltip");
+    }
+</script>
 <body class="">
   <style>
     .body{}
@@ -251,7 +256,7 @@
         </nav>
         <!-- End Navbar -->
         <!-- Header -->
-        <div class="header bg-gradient-primary pb-1 pt-5 pt-md-8">
+        <div class="header bg-gradient-primary pb-1 pt-1 pt-md-8">
             <div class="container-fluid">
                
             </div>
@@ -292,9 +297,10 @@
                                     </select>
                                 </div>
                                 <button type="button" id="applyLocationFilterBtn" class="btn btn-default" style="color: white; margin-left: 10px; margin-bottom: 5px; background: #16A796; font-size: 12px;">Apply</button>
-                                <div class="form-group" style="padding-left: 35rem;">
-                                    
-                                    <p style="color: #16A796; font-size: 14px; margin-bottom: 5px; font-weight: bold;">Logistics = <span style="color:red">Seating Capacity</span><span style="color:#525F7F">/</span>Sound System<span style="color:#525F7F">/</span><span style="color:red">Display</span><span style="color:#525F7F">/</span>Exam Capacity [P = Projector, L = LCD, Y = Yes, N = No]</p>
+                                <div class="groups" style="padding-left: 35rem;">
+                                    <button id="tooltip-button" onclick="showTooltip()">Key</button>
+
+                                    <p id="tooltip-paragraph" style="color: #16A796; font-size: 14px; margin-bottom: 5px; font-weight: bold;">Logistics = <span style="color:red">Seating Capacity</span><span style="color:#525F7F">/</span>Sound System<span style="color:#525F7F">/</span><span style="color:red">Display</span><span style="color:#525F7F">/</span>Exam Capacity [P = Projector, L = LCD, Y = Yes, N = No]</p>
                                 </div>
                             </form>
                         </div>
@@ -327,11 +333,11 @@
                                         <tr>
                                             <!-- Static columns -->
                                             <th class="static-column" style="font-size: 12px; font-weight: bold; padding-right: 7rem">Location</th>
-                                            <th class="static-column" style="font-size: 12px; font-weight: bold;">Logistics
+                                            <th class="static-column info" style="font-size: 12px; font-weight: bold;">Logistics
                                             
                                             </th>
                                             <!-- New column for occupied/unoccupied hours -->
-                                            <th class="static-column" style="font-size: 12px; font-weight: bold;">Utility</th>
+                                            <th class="static-column info" style="font-size: 12px; font-weight: bold;">Utility</th>
                                             <!-- Scrollable columns -->
                                             @foreach ($timeIntervals as $interval)
                                                 @php
@@ -349,13 +355,13 @@
                             <tr class="location-row location-row-{{ $location->id }}">
                                 <!-- Static column content -->
                                 <td class="static-column">{{ $location->location }}</td>
-                                <td class="static-column">
+                                <td class="static-column info">
                                     <span style="color:red; font-weight: bold;">{{ $location->capacity }} </span><span style="font-weight:bold";>/</span>
                                     <span style="color:#24A884; font-weight: bold;">{{ $location->soundSystem }}</span><span style="font-weight:bold";>/</span>
                                     <span style="color:red; font-weight: bold;">{{ $location->display }}</span><span style="font-weight:bold";>/</span>
                                     <span style="color:#24A884; font-weight: bold;">{{ $location->capacity }}</span>
                                 </td>
-                                <td class="static-column">
+                                <td class="static-column info">
                                     @php
                                         $occupiedHours = 0;
                                         $unoccupiedHours = 0;

@@ -29,6 +29,17 @@ class AdmindashboardController extends Controller
             ->get();
         return view('admin.admindashboard')->with(compact('admindata', 'currentdate'));
     }
+    public function dataWithdates(Request $request)
+    {
+        $currentdate = Carbon::parse($request['userdate'])->format('Y-m-d');
+        //$day =  $currentdate->format('l');
+        $admindata = Schedule::where('date', '=', $currentdate)
+            ->where('admissible', '=', 0)
+            ->with(['user', 'activity', 'location'])
+            ->orderBy('date')
+            ->get();
+        return view('admin.modify')->with(compact('admindata', 'currentdate'));
+    }
 
     public function dataWithclass(Request $request)
     {
@@ -124,7 +135,6 @@ class AdmindashboardController extends Controller
         $schedules = Schedule::with(['user', 'activity', 'location'])
             ->where('class_id', $classId)
             ->whereBetween('date', [$startDate, $endDate])
-
             ->orderBy('date')
             ->orderBy('time_from')
 
@@ -189,28 +199,32 @@ class AdmindashboardController extends Controller
         if (!$user) {
             return back()->with('error', 'User not found');
         }
-        // Check if the location is already booked for the specified time frame
-        $startTime = $schedule->time_from;
-        $endTime = $schedule->time_to;
-        $selectedDays = [$schedule->day]; // Assuming day is a single value, change as needed
 
-        $existingSchedules = Schedule::where('location_id', $location_id)
-            ->whereIn('day', $selectedDays)
-            ->where('id', '<>', $id) // Exclude the current schedule from the check
-            ->get();
+        // Check if updating the location
+        if ($schedule->location_id != $location_id) {
+            // Check for location overlap
+            $startTime = $time_from;
+            $endTime = $time_to;
+            $selectedDays = [$day]; // Assuming day is a single value, change as needed
 
-        foreach ($existingSchedules as $existingSchedule) {
-            if (
-                ($startTime >= $existingSchedule->time_from && $startTime < $existingSchedule->time_to) ||
-                ($endTime > $existingSchedule->time_from && $endTime <= $existingSchedule->time_to) ||
-                ($startTime <= $existingSchedule->time_from && $endTime >= $existingSchedule->time_to)
-            ) {
-                return redirect()->back()->withErrors(['error' => 'Location is already booked for ' . $existingSchedule->user->name . ' at this date and time.']);
+            $existingSchedules = Schedule::where('location_id', $location_id)
+                ->whereIn('day', $selectedDays)
+                ->where('id', '<>', $id) // Exclude the current schedule from the check
+                ->get();
+
+            foreach ($existingSchedules as $existingSchedule) {
+                if (
+                    ($startTime >= $existingSchedule->time_from && $startTime < $existingSchedule->time_to) ||
+                    ($endTime > $existingSchedule->time_from && $endTime <= $existingSchedule->time_to) ||
+                    ($startTime <= $existingSchedule->time_from && $endTime >= $existingSchedule->time_to)
+                ) {
+                    return redirect()->back()->withErrors(['error' => 'Location is already booked for ' . $existingSchedule->user->name . ' at this date and time.']);
+                }
             }
         }
 
         if (Auth::user()->userID == 2558) {
-
+            // Update the schedule's fields
             $schedule->update([
                 'location_id' => $location_id,
                 'class_id' => $class_id,
@@ -221,7 +235,7 @@ class AdmindashboardController extends Controller
                 'department' => $department_id,
                 'activity_id' => $activity_id,
                 'day' => $day, // If present in the form
-                'date' => $date, // If present in the for
+                'date' => $date, // If present in the form
                 // Add other fields as needed
             ]);
         } else {
@@ -251,5 +265,6 @@ class AdmindashboardController extends Controller
             return back()->with('error', 'Error updating record');
         }
     }
+
 
 }

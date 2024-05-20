@@ -161,13 +161,44 @@ $(document).ready(function() {
 </head>
 <body class="">
   <style>
-    .btn-custom {
+.btn-custom {
     background-color: #16A796;
     color: #fff; /* Optionally, change text color to white */
 }
 .btn-custom:hover {
     color: #575151; /* Change text color to white on hover */
 }
+.table-container {
+    max-height: 550px; /* Adjust the height as needed */
+    overflow-y: auto; /* Vertical scroll */
+    position: relative;
+}
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 100;
+}
+table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .sticky-header th {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background-color: #fff;
+    }
+
+
   </style>
   <header class="navbar navbar-expand-md navbar-light bg-white">
     <div class="container-fluid">
@@ -224,6 +255,10 @@ $(document).ready(function() {
             <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
                 <i class="ni ni-key-25 text-info"></i>Monthly Schedule
             </a>
+            <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i>Edit
+            </a>
+           
             
         </div>
 
@@ -244,7 +279,7 @@ $(document).ready(function() {
         </nav>
         <!-- End Navbar -->
         <!-- Header -->
-        <div class="header bg-gradient-primary pb-5 pt-5 pt-md-8">
+        <div class="header bg-gradient-primary pb-1 pt-1 pt-md-8">
             <div class="container-fluid">
             
             </div>
@@ -256,18 +291,12 @@ $(document).ready(function() {
                     <div class="card shadow">
                         <div class="card-header border-0">
                             <div class="row align-items-center">
-                                <div class="col-md-12 text-center">
-                                    {{-- @php
-                     $current = Today();
-                   @endphp --}}
-
-
-                                   
-                                    {{-- <div class="divs"> <h3> {{ \Carbon\Carbon::parse($currentdate)->format('d F, Y') }}
-                                      {{-- <input type="date" id="filter_date" name="userdate" value= > 
-                                    </h3>
-                                </div> --}}
-                                
+                                <div class="col-md-4 text-center">
+                                    <div>
+                                        <button id="export-btn" style="background-color: #1BA998; color: #FFFFFF;" class="btn">Export to Excel</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center">
                                
                                 <div class="divs">
                                     <form method="GET" id="filter_form">
@@ -280,6 +309,9 @@ $(document).ready(function() {
                                     </form>
                                 </div>
                             </div>
+                            <div class="col-md-4 text-center">
+                                
+                            </div>
                         </div>
                     </div>
                            
@@ -287,21 +319,19 @@ $(document).ready(function() {
                         <div class="col-md-12">
                             <div class="panel panel-primary filterable">
                                 <div class="panel-heading">
-                                  <div>
-                                    <button id="export-btn" style="background-color: #1BA998; color: #FFFFFF;" class="btn">Export to Excel</button>
-                                </div>
                                     <div class="col pull-right text-right">
                                   
                                         <button class="btn btn-primary btn-sm btn-filter"><span
                                                 class="glyphicon glyphicon-filter"></span> Filter</button>
                                     </div>
                                     
+                                    
                                     <h3 class="mb-10 panel-title"></h3>
                                 </div>
-                                
+                                <div class="table-container">
                                 <table  class=" table table-bordered table-responsive" >
                                     <thead>
-                                        <tr class="filters">
+                                        <tr class="filters sticky-header">
                                             {{-- <th><input type="text" class="form-control" placeholder="Date" disabled></th> --}}
                                             <th><b><input type="text" class="form-control" placeholder="Day" disabled></b></th>
                                             <th><input type="text" class="form-control" placeholder="Time From"disabled></th>
@@ -311,7 +341,7 @@ $(document).ready(function() {
                                             <th><input type="text" class="form-control" placeholder="Class" disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Location" disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Remarks" disabled></th>
-                                            <th><input type="text" class="form-control" placeholder="Action" disabled></th>
+                                            {{-- <th><input type="text" class="form-control" placeholder="Action" disabled></th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -321,14 +351,14 @@ $(document).ready(function() {
                                             <td>{{$data->day}}</td>
                                             <td>{{ \Carbon\Carbon::parse($data->time_from)->format('h:i A') }}</td>
                                             <td>{{ \Carbon\Carbon::parse($data->time_to)->format('h:i A') }}</td>
-                                            <td>{{$data->user->name}} </td>
+                                            <td>{{ $data->user ? $data->user->name : 'Unknown' }}</td>
                                             <td>{{$data->activity->activity_name}} </td>
                                             <td>{{$data->class->class_name}} </td>
                                             <td>{{$data->location->location}} </td>
                                             <td>{{$data->remarks}}</td>
-                                            <td>
+                                            {{-- <td>
                                               <a style="background-color: #1BA998; color: #fff;" href="edit/{{ $data->id }}" class="btn edit-button"><span class="edit-icon">&#9998;</span></a>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -339,7 +369,7 @@ $(document).ready(function() {
                             {{-- <div class="col-md-1"></div>
           </div> --}}
                         </div>
-
+                    </div>
 
                     </div>
                 </div>

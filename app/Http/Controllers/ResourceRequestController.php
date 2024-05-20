@@ -119,10 +119,11 @@ class ResourceRequestController extends Controller
                     $data->location_id = $locationId;
                     $data->remarks = $request->remarks;
                     $data->save();
-                    Mail::to('nida.ismail@imdcollege.edu.pk')->send(new ResourceCreated($request->all()));
+
                 }
             }
         }
+        Mail::to('nida.ismail@imdcollege.edu.pk')->send(new ResourceCreated($request->all()));
 
         return redirect()->back()->with('success', 'Schedule added Successfully');
     }

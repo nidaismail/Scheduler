@@ -29,10 +29,15 @@
                 @role('admin')
                 
                 <ul class="navbar-nav">
-                    @if (Auth::user()->userID == 2254)
+                    @if (in_array(Auth::user()->userID, [2558, 188]))
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('/locationadmin')}}">
-                            <i class="ni ni-key-25 text-info"></i> Dashboard
+                        <a class="nav-link " href="{{url('/modify')}}">
+                            <i class="ni ni-key-25 text-info"></i> Edit
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{url('/admin')}}">
+                            <i class="ni ni-single-02 text-yellow"></i> Dashboard
                         </a>
                     </li>
                     @else

@@ -116,11 +116,11 @@ class HomeController extends Controller
                             ->exists();
 
                         if ($existingSchedules) {
-                            return redirect()->back()->with('error', 'Location is already booked for the selected time frame.')->withInput();
+                            return redirect()->back()->with('error', 'Location is already booked for the selected time frame.');
                         }
                     } else {
                         // If the time frame is outside 8 AM - 3 PM, handle accordingly (e.g., show error or set a default value)
-                        return redirect()->back()->with('error', 'The time frame should be between 8 AM and 3 PM.')->withInput();
+                        return redirect()->back()->with('error', 'The time frame should be between 8 AM and 3 PM.');
                     }
                 }
             }
