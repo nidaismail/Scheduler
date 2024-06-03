@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Grade;
 use App\Models\Schedule;
@@ -22,6 +23,7 @@ class MutableController extends Controller
         // Fetch schedules based on the selected class, date range, and location
         $schedulesQuery = Schedule::with(['user', 'activity', 'class', 'location'])
             ->whereBetween('date', [$startDate, $endDate])
+            ->where('admissible', '=', 0)
             ->orderBy('date')
             ->orderBy('time_from');
 
@@ -40,10 +42,27 @@ class MutableController extends Controller
         // Fetch schedules based on the modified query
         $schedules = $schedulesQuery->get();
 
+        $loggedInUser = Auth::user();
+        $loggedInUser->load('roles');
+
+        // Determine if the user is an admin or superadmin
+        $isAdmin = $loggedInUser->roles->contains('name', 'admin');
+        $isSuperadmin = $loggedInUser->roles->contains('name', 'Superadmin');
+
+        // Fetch users based on roles and department
+        if ($isAdmin || $isSuperadmin) {
+            $users = User::all()->sortBy('name');
+        } else {
+            $users = User::where('dep_id', $loggedInUser->dep_id)->get()->sortBy('name');
+        }
+        // $roleNames = $loggedInUser->roles->pluck('name')->toArray();
+        // Log::info('Logged-in user roles:', $roleNames);
+        // // Debug: Log the roles and fetched users
+        // \Log::info('Logged-in user role: ' . $loggedInUser->role);
+        // \Log::info('Fetched users count: ' . $users->count());
 
         $locations = Location::all()->sortBy('location');
         $classes = Grade::all()->sortBy('class');
-        $users = User::all()->sortBy('user');
         $activities = Schedule::all()->sortBy('activity');
 
         // Pass the schedules to the view
@@ -146,33 +165,39 @@ class MutableController extends Controller
                     // Retrieve user IDs from the updated data
                     $userIds = $scheduleData['person'];
 
-                    // Retrieve remarks from the updated data
-                    $remarks = $scheduleData['remarks'];
-
-                    // Update the schedule with the first selected user ID and remarks
+                    // Update the schedule with the first selected user ID
                     $schedule->user_id = $userIds[0]; // Assign the first selected user ID
+                }
+
+                // Check if 'remarks' key is provided
+                if (isset($scheduleData['remarks'])) {
+                    // Retrieve and update remarks from the updated data
+                    $remarks = $scheduleData['remarks'];
                     $schedule->remarks = $remarks; // Assign the remarks
-                    $schedule->save();
+                }
 
-                    // Log the schedule update
-                    Log::info('Schedule updated', ['scheduleId' => $scheduleId]);
+                // Save the schedule
+                $schedule->save();
 
-                    // Replicate and save the schedule for the remaining users
-                    for ($i = 1; $i < count($userIds); $i++) {
+                // Log the schedule update
+                Log::info('Schedule updated', ['scheduleId' => $scheduleId]);
+
+                // If 'person' key is provided, replicate and save the schedule for the remaining users
+                if (isset($scheduleData['person']) && !empty($scheduleData['person'])) {
+                    for ($i = 1; $i < count($scheduleData['person']); $i++) {
                         // Clone the original schedule
                         $newSchedule = $schedule->replicate();
 
                         // Update the cloned schedule with the user ID and remarks
-                        $newSchedule->user_id = $userIds[$i];
-                        $newSchedule->remarks = $remarks; // Use the same remarks for all cloned schedules
+                        $newSchedule->user_id = $scheduleData['person'][$i];
 
                         // Save the cloned schedule
                         $newSchedule->save();
                     }
-                } else {
-                    // If 'person' key is not provided or empty, log the situation
-                    Log::info('No user IDs provided for schedule update', ['scheduleId' => $scheduleId]);
                 }
+            } else {
+                // If the schedule is not found, log the situation
+                Log::warning('Schedule not found', ['scheduleId' => $scheduleId]);
             }
         }
 

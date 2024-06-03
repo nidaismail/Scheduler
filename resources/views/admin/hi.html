@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Table</title>
+
+    <style>
+        .Find_A_Doc_Container {
+            width: 80%;
+            margin: auto;
+        }
+        .Find_A_Doc_Filter_Container {
+            margin-bottom: 20px;
+        }
+        .Find_A_Doc_Search, .Find_A_Doc_Specialty {
+            padding: 10px;
+            margin-right: 10px;
+        }
+        .Find_A_Doc_Table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .Find_A_Doc_Table_Header {
+            background-color: #2AA3C8;
+            padding: 10px;
+            text-align: left;
+        }
+        .Find_A_Doc_Table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .Find_A_Doc_Image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .Find_A_Doc_Action_Button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .Find_A_Doc_Action_Button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="Find_A_Doc_Container">
+    <div class="Find_A_Doc_Filter_Container">
+        <input type="text" id="searchInput" class="Find_A_Doc_Search" onkeyup="filterFunction()" placeholder="Search Doctor Name">
+        <select id="specialtySelect" class="Find_A_Doc_Specialty" onchange="filterFunction()">
+            <option value="">All Specialties</option>
+            <option value="Cardiac anesthesia">Cardiac anesthesia</option>
+            <option value="Critical care medicine">Critical care medicine</option>
+            <option value="Anesthesia & Critical Care Medicine">Anesthesia & Critical Care Medicine</option>
+            <option value="Orthopedic Trauma">Orthopedic Trauma</option>
+            <option value="Open and Endoscopic Urological Surgeries">Open and Endoscopic Urological Surgeries</option>
+            <option value="Laparoscopic Surgery Procedures">Laparoscopic Surgery Procedures</option>
+            <option value="Treatment for Obesity">Treatment for Obesity</option>
+            <option value="Basic General Surgical procedures">Basic General Surgical procedures</option>
+            <option value="Cancers Surgeries">Cancers Surgeries</option>
+            <option value="Ophthalmology">Ophthalmology</option>
+            <option value="Emergency Medicine Isolation Critical Care">Emergency Medicine Isolation Critical Care</option>
+        </select>
+    </div>
+    <table id="doctorTable" class="Find_A_Doc_Table">
+        <thead>
+            <tr>
+                <th class="Find_A_Doc_Table_Header">Name</th>
+                <th class="Find_A_Doc_Table_Header">Speciality</th>
+                <th class="Find_A_Doc_Table_Header">Job Title</th>
+                <th class="Find_A_Doc_Table_Header">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/05/Khawaja_Kamal_nasir-700x700.jpg" alt="Dr. Khawaja Kamal Nasir" class="Find_A_Doc_Image">
+                    Dr. Khawaja Kamal Nasir
+                </td>
+                <td>Cardiac anesthesia, Critical care medicine</td>
+                <td>Consultant</td>
+                <td>
+                    <button onclick= "window.location.href = 'https://danthospital.com/t1/doctors/dr-khawaja-kamal-nasir/';" class="Find_A_Doc_Action_Button">Profile</button> 
+                    <button  onclick= "window.location.href = 'https://danthospital.com/t1/appointment/';"class="Find_A_Doc_Action_Button">Book</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/05/WhatsApp-Image-2024-05-21-at-1.30.48-PM-700x700.jpeg" alt="Dr. Syed Rameez Hassan" class="Find_A_Doc_Image">
+                    Dr. Syed Rameez Hassan
+                </td>
+                <td>Anesthesia & Critical Care Medicine</td>
+                <td>Consultant</td>
+                <td>
+                    <button onclick= "window.location.href = 'https://danthospital.com/t1/doctors/dr-syed-rameez-hassan/';" class="Find_A_Doc_Action_Button">Profile</button> 
+                    <button  onclick= "window.location.href = 'https://danthospital.com/t1/appointment/';"class="Find_A_Doc_Action_Button">Book</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/05/WhatsApp-Image-2024-05-14-at-3.13.25-PM-700x700.jpeg" alt="Dr. Muhammad Rehman" class="Find_A_Doc_Image">
+                    Dr. Muhammad Rehman
+                </td>
+                <td>Orthopedic Trauma</td>
+                <td>Consultant</td>
+                <td>
+                    <button onclick= "window.location.href = 'https://danthospital.com/t1/doctors/dr-muhammad-rehman/';" class="Find_A_Doc_Action_Button">Profile</button> 
+                    <button  onclick= "window.location.href = 'https://danthospital.com/t1/appointment/';"class="Find_A_Doc_Action_Button">Book</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/05/WhatsApp-Image-2024-05-07-at-10.39.28-AM-700x700.jpeg" alt="Dr. Monib Ahmad" class="Find_A_Doc_Image">
+                    Dr. Monib Ahmad
+                </td>
+                <td>Open and Endoscopic Urological Surgeries</td>
+                <td>Consultant</td>
+                <td>
+                    <button onclick= "window.location.href = 'https://danthospital.com/t1/doctors/dr-monib-ahmad/';" class="Find_A_Doc_Action_Button">Profile</button> 
+                    <button  onclick= "window.location.href = 'https://danthospital.com/t1/appointment/';"class="Find_A_Doc_Action_Button">Book</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/04/Prof-Dr.-Ahmad-Raza-HOD-General-Surgery-700x700.jpg" alt="Prof. Dr. Ahmad Raza" class="Find_A_Doc_Image">
+                    Prof. Dr. Ahmad Raza
+                </td>
+                <td>Laparoscopic Surgery Procedures, Treatment for Obesity, Basic General Surgical procedures, Cancers Surgeries</td>
+                <td>Consultant</td>
+                <td>
+                    <button onclick= "window.location.href = 'https://danthospital.com/t1/doctors/prof-dr-ahmad-raza/';" class="Find_A_Doc_Action_Button">Profile</button> 
+                    <button  onclick= "window.location.href = 'https://danthospital.com/t1/appointment/';"class="Find_A_Doc_Action_Button">Book</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/04/Dr.-Ali-Tayyab-Prof-Ophthalmology-700x700.jpg" alt="Prof. Dr. Ali Tayyab" class="Find_A_Doc_Image">
+                    Prof. Dr. Ali Tayyab
+                </td>
+                <td>Ophthalmology</td>
+               <td>Consultant</td>
+               <td>
+                <button onclick= "window.location.href = 'https://danthospital.com/t1/doctors/prof-dr-ali-tayyab/';" class="Find_A_Doc_Action_Button">Profile</button> 
+                <button  onclick= "window.location.href = 'https://danthospital.com/t1/appointment/';"class="Find_A_Doc_Action_Button">Book</button>
+            </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/04/Prof-Khalid-Hassan-Chief-Pathologist-Pathology-700x700.jpg" alt="Prof. Dr. Khalid Hassan" class="Find_A_Doc_Image">
+                    Prof. Dr. Khalid Hassan
+                </td>
+                <td>Emergency Medicine Isolation Critical Care</td>
+                <td>Consultant</td>
+                <td>
+                    <button onclick= "window.location.href = 'https://danthospital.com/t1/doctors/prof-dr-khalid-hassan/';" class="Find_A_Doc_Action_Button">Profile</button> 
+                    <button  onclick= "window.location.href = 'https://danthospital.com/t1/appointment/';"class="Find_A_Doc_Action_Button">Book</button>
+                </td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+    </div>

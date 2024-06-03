@@ -26,33 +26,28 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-teal shadow-sm">
             <div class="container">
-                @role('admin')
-                
-                <ul class="navbar-nav">
-                    @if (in_array(Auth::user()->userID, [2558, 188]))
-                    <li class="nav-item">
-                        <a class="nav-link " href="{{url('/modify')}}">
-                            <i class="ni ni-key-25 text-info"></i> Edit
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="{{url('/admin')}}">
-                            <i class="ni ni-single-02 text-yellow"></i> Dashboard
-                        </a>
-                    </li>
-                    @else
-                    <li class="nav-item">
-                        <a class="nav-link " href="{{url('/admin')}}">
-                            <i class="ni ni-single-02 text-yellow"></i> Dashboard
-                        </a>
-                    </li>
-                    @endif
-                </ul>
-                @else
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Scheduling System') }}
+                @hasanyrole('admin|Superadmin')
+    @if(Request::is('/')) {{-- Checking if the current URL is the root page --}}
+        <a class="navbar-brand" href="{{ url('/') }}">
+            {{ config('app.name', 'Scheduling System') }}
+        </a>
+    @else
+        <ul class="navbar-nav">
+            {{-- @if (in_array(Auth::user()->userID, [2558, 188])) --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('/userhome') }}">
+                    <i class="ni ni-key-25 text-info"></i> Home
                 </a>
-                @endrole
+            </li>
+            {{-- @endif --}}
+        </ul>
+    @endif
+@else
+    <a class="navbar-brand" href="{{ url('/') }}">
+        {{ config('app.name', 'Scheduling System') }}
+    </a>
+@endhasanyrole
+
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -67,37 +62,59 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                        
+    @if (Request::is('/'))
+    @if (Auth::check())
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('/userhome') }}">{{ __('Home') }}</a>
+        </li>
+    @else
+        @if (Route::has('login'))
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+            </li>
+        @endif
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+        @if (Route::has('register'))
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+            </li>
+        @endif
+    @endif
+@else
+    @guest
+        @if (Route::has('login'))
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+            </li>
+        @endif
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+        @if (Route::has('register'))
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+            </li>
+        @endif
+    @else
+        <li class="nav-item dropdown">
+            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                {{ Auth::user()->name }}
+            </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{ route('logout') }}"
+                   onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                    {{ __('Logout') }}
+                </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </div>
+        </li>
+    @endguest
+@endif
+
                     </ul>
                 </div>
             </div>

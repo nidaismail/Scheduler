@@ -68,13 +68,37 @@ class UserdashboardController extends Controller
                 ->get();
 
             // Pass fetched schedules to the same view for display
-            return view('userdashboard')->with(compact('filteredData', 'classes'));
+            return view('admin.userdashboard')->with(compact('filteredData', 'classes'));
         }
 
         // Pass classes data to the view for initial form display
-        return view('userdashboard')->with(compact('classes'));
+        return view('admin.userdashboard')->with(compact('classes'));
     }
+    // public function removeview(Request $request)
+    // {
+    //     $classes = Grade::all();
 
+    //     // Check if form data is submitted
+    //     if ($request->filled(['start_date', 'end_date', 'classSelection'])) {
+    //         // Retrieve form inputs
+    //         $startDate = $request->input('start_date');
+    //         $endDate = $request->input('end_date');
+    //         $classSelection = $request->input('classSelection');
+
+    //         // Query to fetch schedules based on the selected date range and class
+    //         $filteredData = Schedule::where('date', '>=', $startDate)
+    //             ->where('date', '<=', $endDate)
+    //             ->where('class_id', $classSelection)
+    //             ->orderBy('date', 'asc')
+    //             ->get();
+
+    //         // Pass fetched schedules to the same view for display
+    //         return view('admin.remove')->with(compact('filteredData', 'classes'));
+    //     }
+
+    //     // Pass classes data to the view for initial form display
+    //     return view('admin.remove')->with(compact('classes'));
+    // }
     public function filterData(Request $request)
     {
         // Retrieve form inputs
@@ -107,11 +131,20 @@ class UserdashboardController extends Controller
 
     public function admissible(Request $request)
     {
-        $data = Schedule::whereIn('id', $request['schedule_id'])->update(['admissible' => 1]);
-        $data = Schedule::whereNotIn('id', $request['schedule_id'])->update(['admissible' => 0]);
+        // Validate the request
+        $request->validate([
+            'schedule_id' => 'required|integer|exists:schedules,id',
+            'admissible' => 'required|boolean'
+        ]);
 
-        // $data->admissible = $request['schedule_id'];
+        // Find the schedule by ID and update the admissible status
+        $schedule = Schedule::findOrFail($request->schedule_id);
+        $schedule->admissible = $request->admissible;
+        $schedule->save();
+
+        return response()->json(['success' => 'Admissible status updated successfully.']);
     }
+
 
 
     public function index()

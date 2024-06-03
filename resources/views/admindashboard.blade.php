@@ -1,213 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>
-      Person Activity Dashboard
-    </title>
-    
+@extends('layouts.app')
+@push('styles')
     <!-- Favicon -->
     <link href="./images/favicon.png" rel="icon" type="image/png"> 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
+    <link href="css/dashboardstyles.css" rel="stylesheet" />
+    {{-- <link href="css/styles.css" rel="stylesheet" /> --}}
     <link href="./js/plugins/nucleo/css/nucleo.css" rel="stylesheet" />
     <link href="./js/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
-    <!-- CSS Files -->
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" /> --}}
     <link href="./css/argon-dashboard.css?v=1.1.2" rel="stylesheet" />
-    
-    {{-- {{-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> --}}
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <style>
+        .btn-custom {
+            background-color: #16A796;
+            color: #fff; /* Optionally, change text color to white */
+        }
+        .btn-custom:hover {
+            color: #575151; /* Change text color to white on hover */
+        }
+        .table-container {
+            max-height: 550px; /* Adjust the height as needed */
+            overflow-y: auto; /* Vertical scroll */
+            position: relative;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 100;
+        }
+        table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            .sticky-header th {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background-color: #fff;
+            }
+        
+        
+          </style>
+@endpush
+@push('scripts')
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-   <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-    <script>
-      $(document).ready(function () {
-          $('input[type=date]').change(function () {
-              this.form.submit();
-          });
-      
-          $('.filterable .btn-filter').click(function () {
-              // ... (your existing filter logic)
-          });
-      
-          $('.filterable .filters input').keyup(function (e) {
-              // ... (your existing filter logic)
-          });
-      
-          $('#preview-btn').click(function () {
-              previewTable();
-          });
-          $('#export-btn').click(function () {
-            const table = $('.filterable .table')[0];
-            const filterDate = $('#filter_date').val(); // Get the selected date
-
-            // Check if there are rows in the table
-            if ($(table).find('tbody tr').length > 0) {
-                exportToExcel(table, filterDate);
-            } else {
-                // Show an alert when there's no data to export
-                alert('No data available in the table for export.');
-            }
-        });
-
-        function formatDateString(dateString) {
-            const dateParts = dateString.split('-'); // Assuming date is in yyyy-mm-dd format
-            const formattedDate = dateParts[2] + dateParts[1] + dateParts[0]; // Format to ddmmyyyy
-            return formattedDate;
-        }
-
-        function exportToExcel(table, filterDate) {
-            const headers = ['Day', 'Time From', 'Time To', 'Person', 'Activity', 'Class', 'Location', 'Remarks'];
-
-            // Remove the "Action" header from headers
-            const actionIndex = headers.indexOf('Action');
-            if (actionIndex !== -1) {
-                headers.splice(actionIndex, 1);
-            }
-
-            const dataRows = [];
-            $('.filterable .table tbody tr').each(function () {
-                const rowData = [];
-                $(this).find('td:not(:last-child)').each(function () { // Exclude last td (Action column)
-                    rowData.push($(this).text());
-                });
-                dataRows.push(rowData);
-            });
-
-            const ws = XLSX.utils.aoa_to_sheet([headers].concat(dataRows));
-
-            // Format date as ddmmyyyy for sheet name
-            const formattedDate = formatDateString(filterDate);
-            const sheetName = 'Timetable_' + formattedDate; // Set the customized sheet name
-
-            // Set font size
-            ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 20 }, { wch: 20 }];
-
-            XLSX.utils.sheet_add_aoa(ws, [['Selected Date: ' + filterDate]], { origin: 'A1' });
-
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, sheetName); // Set the customized sheet name
-            XLSX.writeFile(wb, sheetName + '.xlsx'); // Set the filename with the customized sheet name
-        }
-    });
-</script>
-
+<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
-/*
-Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
-*/
+  $(document).ready(function () {
+      $('input[type=date]').change(function () {
+          this.form.submit();
+      });
+  
+      $('.filterable .btn-filter').click(function () {
+          // ... (your existing filter logic)
+      });
+  
+      $('.filterable .filters input').keyup(function (e) {
+          // ... (your existing filter logic)
+      });
+  
+      $('#preview-btn').click(function () {
+          previewTable();
+      });
+      $('#export-btn').click(function () {
+        const table = $('.filterable .table')[0];
+        const filterDate = $('#filter_date').val(); // Get the selected date
 
-
-
-$(document).ready(function() {
-
-  $('input[type=date]').change(function () {
-    this.form.submit();
-  });
-
-    $('.filterable .btn-filter').click(function() {
-        var $panel = $(this).parents('.filterable'),
-            $filters = $panel.find('.filters input'),
-            $tbody = $panel.find('.table tbody');
-        if ($filters.prop('disabled') == true) {
-            $filters.prop('disabled', false);
-            $filters.first().focus();
+        // Check if there are rows in the table
+        if ($(table).find('tbody tr').length > 0) {
+            exportToExcel(table, filterDate);
         } else {
-            $filters.val('').prop('disabled', true);
-            $tbody.find('.no-result').remove();
-            $tbody.find('tr').show();
+            // Show an alert when there's no data to export
+            alert('No data available in the table for export.');
         }
     });
-    $('.filterable .filters input').keyup(function(e) {
-        /* Ignore tab key */
-        var code = e.keyCode || e.which;
-        if (code == '9') return;
-        /* Useful DOM data and selectors */
-        var $input = $(this),
-            inputContent = $input.val().toLowerCase(),
-            $panel = $input.parents('.filterable'),
-            column = $panel.find('.filters th').index($input.parents('th')),
-            $table = $panel.find('.table'),
-            $rows = $table.find('tbody tr');
-        /* Dirtiest filter function ever ;) */
-        var $filteredRows = $rows.filter(function() {
-            var value = $(this).find('td').eq(column).text().toLowerCase();
-            return value.indexOf(inputContent) === -1;
+
+    function formatDateString(dateString) {
+        const dateParts = dateString.split('-'); // Assuming date is in yyyy-mm-dd format
+        const formattedDate = dateParts[2] + dateParts[1] + dateParts[0]; // Format to ddmmyyyy
+        return formattedDate;
+    }
+
+    function exportToExcel(table, filterDate) {
+        const headers = ['Day', 'Time From', 'Time To', 'Person', 'Activity', 'Class', 'Location', 'Remarks'];
+
+        // Remove the "Action" header from headers
+        const actionIndex = headers.indexOf('Action');
+        if (actionIndex !== -1) {
+            headers.splice(actionIndex, 1);
+        }
+
+        const dataRows = [];
+        $('.filterable .table tbody tr').each(function () {
+            const rowData = [];
+            $(this).find('td:not(:last-child)').each(function () { // Exclude last td (Action column)
+                rowData.push($(this).text());
+            });
+            dataRows.push(rowData);
         });
-        /* Clean previous no-result if exist */
-        $table.find('tbody .no-result').remove();
-        /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
-        $rows.show();
-        $filteredRows.hide();
-        /* Prepend no-result row if all rows are filtered */
-        if ($filteredRows.length === $rows.length) {
-            $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table
-                .find('.filters th').length + '">No result found</td></tr>'));
-        }
-    });
+
+        const ws = XLSX.utils.aoa_to_sheet([headers].concat(dataRows));
+
+        // Format date as ddmmyyyy for sheet name
+        const formattedDate = formatDateString(filterDate);
+        const sheetName = 'Timetable_' + formattedDate; // Set the customized sheet name
+
+        // Set font size
+        ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 20 }, { wch: 20 }];
+
+        XLSX.utils.sheet_add_aoa(ws, [['Selected Date: ' + filterDate]], { origin: 'A1' });
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, sheetName); // Set the customized sheet name
+        XLSX.writeFile(wb, sheetName + '.xlsx'); // Set the filename with the customized sheet name
+    }
 });
 </script>
-</head>
-<body class="">
-  <style>
-.btn-custom {
-    background-color: #16A796;
-    color: #fff; /* Optionally, change text color to white */
-}
-.btn-custom:hover {
-    color: #575151; /* Change text color to white on hover */
-}
-.table-container {
-    max-height: 550px; /* Adjust the height as needed */
-    overflow-y: auto; /* Vertical scroll */
-    position: relative;
-}
-.sticky-header {
-    position: sticky;
-    top: 0;
-    background-color: #fff;
-    z-index: 100;
-}
-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    .sticky-header th {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background-color: #fff;
-    }
+<script>
+    $(document).ready(function() {
     
-        .disabled {
-            pointer-events: none;
-            opacity: 0.65;
-            cursor: not-allowed;
-            text-decoration: none;
-        }
-    </style>
+      $('input[type=date]').change(function () {
+        this.form.submit();
+      });
+    
+        $('.filterable .btn-filter').click(function() {
+            var $panel = $(this).parents('.filterable'),
+                $filters = $panel.find('.filters input'),
+                $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                $tbody.find('.no-result').remove();
+                $tbody.find('tr').show();
+            }
+        });
+        $('.filterable .filters input').keyup(function(e) {
+            /* Ignore tab key */
+            var code = e.keyCode || e.which;
+            if (code == '9') return;
+            /* Useful DOM data and selectors */
+            var $input = $(this),
+                inputContent = $input.val().toLowerCase(),
+                $panel = $input.parents('.filterable'),
+                column = $panel.find('.filters th').index($input.parents('th')),
+                $table = $panel.find('.table'),
+                $rows = $table.find('tbody tr');
+            /* Dirtiest filter function ever ;) */
+            var $filteredRows = $rows.filter(function() {
+                var value = $(this).find('td').eq(column).text().toLowerCase();
+                return value.indexOf(inputContent) === -1;
+            });
+            /* Clean previous no-result if exist */
+            $table.find('tbody .no-result').remove();
+            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+            $rows.show();
+            $filteredRows.hide();
+            /* Prepend no-result row if all rows are filtered */
+            if ($filteredRows.length === $rows.length) {
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table
+                    .find('.filters th').length + '">No result found</td></tr>'));
+            }
+        });
+    });
+    </script>
+@endpush
 
-  </style>
-  <header class="navbar navbar-expand-md navbar-light bg-white">
+@section('content')
+  {{-- <header class="navbar navbar-expand-md navbar-light bg-white">
     <div class="container-fluid">
         <!-- Toggler -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main"
@@ -243,46 +220,31 @@ table {
         </div>
         
         <div class="d-flex">
-            <a class="btn btn-custom" href="{{url('/userhome')}}">
+            <a class="btn btn-custom" href="{{url('/home')}}">
                 <i class="ni ni-single-02 text-yellow"></i> Home
             </a>
-            @hasanyrole(['admin','Superadmin'])
-            <a class="btn btn-custom mr-2" href="{{url('/modify')}}" target="_self">
-                <i class="ni ni-key-25 text-info"></i> Update Schedules
-            </a>
-            <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
-                <i class="ni ni-key-25 text-info"></i>User Information Adddition
-            </a>
-            @endhasanyrole
-            <a class="btn btn-custom mr-2 disabled" href="{{url('/#')}}" target="_self">
+            {{-- <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
                 <i class="ni ni-key-25 text-info"></i> Person Activity
             </a> 
-            <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
-                <i class="ni ni-key-25 text-info"></i> Class Activity
-            </a>
             <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
                 <i class="ni ni-key-25 text-info"></i> Campus Activity
             </a>
-           
+            <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i> Class Activity
+            </a>
+            
             <a class="btn btn-custom mr-2" href=" {{url('/roles')}}" target="_self">
                 <i class="ni ni-key-25 text-info"></i> Location Activity
             </a>
             <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
                 <i class="ni ni-key-25 text-info"></i>Monthly Schedule
             </a>
-            @hasexactroles('user')
             <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
                 <i class="ni ni-key-25 text-info"></i>Edit
             </a>
-            @endhasexactroles
-           
-            
         </div>
-
-
-
     </div>
-</header>
+</header> --}}
 
     <div class="main-content">
         <!-- Navbar -->
@@ -290,8 +252,7 @@ table {
             <div class="container-fluid">
                 <!-- Brand -->
                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-                    href="">Person Activity Dashboard</a>
-                <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{{ Auth::user()->name }}</p>
+                    href="{{url('/admin')}}">Person Activity Dashboard</a>
               
             </div>
         </nav>
@@ -358,7 +319,7 @@ table {
                                             <th><input type="text" class="form-control" placeholder="Activity" disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Class" disabled></th>
                                             <th><input type="text" class="form-control" placeholder="Location" disabled></th>
-                                            <th><input type="text" class="form-control" placeholder="Topic" disabled></th>
+                                            <th><input type="text" class="form-control" placeholder="Remarks" disabled></th>
                                             {{-- <th><input type="text" class="form-control" placeholder="Action" disabled></th> --}}
                                         </tr>
                                     </thead>
@@ -421,6 +382,8 @@ table {
       </footer> --}}
         </div>
     </div>
+    @endsection
+    @prepend('scripts')
     <!--   Core   -->
     <script src="./js/plugins/jquery/dist/jquery.min.js"></script>
     <script src="./js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -449,6 +412,5 @@ table {
                           
                       
     </script>
-</body>
+    @endprepend
 
-</html>

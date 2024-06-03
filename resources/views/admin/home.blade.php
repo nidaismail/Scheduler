@@ -203,12 +203,6 @@ $(document).ready(function () {
         updateButtonText();
     });
 
-    // // Handle checkbox change event to update button text
-    // $('.person-item input[type="checkbox"]').on('change', function () {
-    //     updateButtonText();
-    // });
-
-    // Search for classes in the dropdown
     $('#classSearch, #classSearch2').on('input', function () {
         var searchQuery = $(this).val().toLowerCase();
         // Find the dropdown container
@@ -283,10 +277,11 @@ $(document).ready(function () {
                             </span>
                         </div>
                         <div class="row justify-content-center given-mar">
-                            <div class="col-lg-7">
+                            <div class="col-lg-12">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-group">
+                                            
                                             <label for="input_from">Select</label>
                                             <input type="radio" id="id" value="Class" name="category" class="pad">
                                             <label for="" class="cat">Class</label>
@@ -295,8 +290,9 @@ $(document).ready(function () {
                                             <label for="" class="cat">Person</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 removed" id="displayPerson">
+                                    <div class="col-md-3 removed" id="displayPerson">
                                         <div class="form-group">
+                                            <label for="input_from">Person</label>
                                             <div class="dropdown">
                                                 <button class="form-control dropdown-toggle" type="button" id="personsDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Select Persons
@@ -315,8 +311,9 @@ $(document).ready(function () {
                                     </div>
                                     
                                     
-                                    <div class="col-md-6 removedClass" id="displayClass">
+                                    <div class="col-md-3 removedClass" id="displayClass">
                                         <div class="form-group">
+                                            <label for="input_from">Class</label>
                                             <div class="dropdown">
                                                 <button class="form-control dropdown-toggle @error('class') is-invalid @enderror" type="button" id="classDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Select Class
@@ -336,9 +333,113 @@ $(document).ready(function () {
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="input_from">Date From</label>
+                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
+                                                   name="start_date" class="form-control" id="start_date" placeholder=""
+                                                   required value="{{ old('start_date', date('Y-m-d')) }}">
+                                        </div>
+ 
+                                     </div>
+                                     <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="input_to">Date To</label>
+                                            @php
+                                                // Get the current year and month
+                                                $currentYear = date('Y');
+                                                $currentMonth = date('m');
+                                                
+                                                // Calculate the end date of the current month
+                                                $endOfMonth = date('Y-m-t', strtotime("$currentYear-$currentMonth-01"));
+                                            @endphp
+                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY"
+                                                   name="end_date" class="form-control" id="end_date"
+                                                   placeholder="End Date" required
+                                                   value="{{ old('end_date', $endOfMonth) }}">
+                                        </div>
+                                        
+                                    </div>
                                     
                                 </div>
                             </div> 
+                       
+                        {{-- <div class="row justify-content-center given-mar">
+                            <div class="col-lg-7">
+                                <div action="#" class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="input_from">Date From</label>
+                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
+                                                   name="start_date" class="form-control" id="start_date" placeholder=""
+                                                   required value="{{ old('start_date', date('Y-m-d')) }}">
+                                        </div>
+ 
+                                     </div>
+                                    {{-- @php
+                                    $today = \Carbon\Carbon::now(); //Current Date and Time
+                                   $lastDayofMonth =    \Carbon\Carbon::parse($today)->endOfMonth()->toDateString();
+                                   dd($lastDayofMonth);
+                                   @endphp --}}
+                                   {{-- <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="input_to">Date To</label>
+                                        @php
+                                            // Get the current year and month
+                                            $currentYear = date('Y');
+                                            $currentMonth = date('m');
+                                            
+                                            // Calculate the end date of the current month
+                                            $endOfMonth = date('Y-m-t', strtotime("$currentYear-$currentMonth-01"));
+                                        @endphp
+                                        <input type="date" data-date="" data-date-format="DD MMMM YYYY"
+                                               name="end_date" class="form-control" id="end_date"
+                                               placeholder="End Date" required
+                                               value="{{ old('end_date', $endOfMonth) }}">
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </div> --}} 
+                        <div class="row justify-content-center given-mar">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="input_from">Time From</label>
+                                            <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror" id="start_time" value="{{ old('start_time', '08:00') }}" required>
+                                            @error('start_time')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="input_to">Time To</label>
+                                            <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror" id="end_time" value="{{ old('end_time', '15:00') }}" required>
+                                            @error('end_time')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="size">Slot Size</label>
+                                            <select name="size" id="size" class="form-control @error('size') is-invalid @enderror" required>
+                                                <option value="" disabled>Select a Slot</option>
+                                                
+                                            </select>
+                                            @error('activity')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="form-group">
                                 <div class="dowPicker">
@@ -374,71 +475,6 @@ $(document).ready(function () {
                                 @error('day')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                        </div>
-                        <div class="row justify-content-center given-mar">
-                            <div class="col-lg-7">
-                                <div action="#" class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="input_from">Date From</label>
-                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
-                                                   name="start_date" class="form-control" id="start_date" placeholder=""
-                                                   required value="{{ old('start_date', date('Y-m-d')) }}">
-                                        </div>
- 
-                                     </div>
-                                    {{-- @php
-                                    $today = \Carbon\Carbon::now(); //Current Date and Time
-                                   $lastDayofMonth =    \Carbon\Carbon::parse($today)->endOfMonth()->toDateString();
-                                   dd($lastDayofMonth);
-                                   @endphp --}}
-                                   <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="input_to">Date To</label>
-                                        @php
-                                            // Get the current year and month
-                                            $currentYear = date('Y');
-                                            $currentMonth = date('m');
-                                            
-                                            // Calculate the end date of the current month
-                                            $endOfMonth = date('Y-m-t', strtotime("$currentYear-$currentMonth-01"));
-                                        @endphp
-                                        <input type="date" data-date="" data-date-format="DD MMMM YYYY"
-                                               name="end_date" class="form-control" id="end_date"
-                                               placeholder="End Date" required
-                                               value="{{ old('end_date', $endOfMonth) }}">
-                                    </div>
-                                    
-                                </div>
-                                
-                            </div>
-                        </div>
-
-
-                        <div class="row justify-content-center given-mar">
-                            <div class="col-lg-7">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="input_from">Time From</label>
-                                            <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror" id="start_time" value="{{ old('start_time', '08:00') }}" required>
-                                            @error('start_time')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="input_to">Time To</label>
-                                            <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror" id="end_time" value="{{ old('end_time', '15:00') }}" required>
-                                            @error('end_time')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    
-                                </div>
                             </div>
                         </div>
                         <div class="row justify-content-center given-mar">
@@ -499,8 +535,6 @@ $(document).ready(function () {
                                             @enderror
                                         </div>
                                     </div>
-                                    
-                                  
                                     <div class="col-md-6 hiddenClass" id="showClass">
                                         <label for="class">Class</label>
                                         <div class="form-group">
@@ -523,10 +557,9 @@ $(document).ready(function () {
                                             @enderror
                                         </div>
                                     </div>
-                                    
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="remarks">Remarks</label>
+                                            <label for="remarks">Topic</label>
                                             <input type="text" name="remarks" id="remarks" class="form-control @error('remarks') is-invalid @enderror" value="{{ old('remarks') }}" required>
                                             @error('remarks')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -543,50 +576,31 @@ $(document).ready(function () {
                                     <div style="padding-top: 10px" class="col-md-4 col-sm-12">
                                         <a href="{{ route('save') }}" id="schedule-form"> <button type="submit"
                                                 class="btn btn-success rounded-3 justify-content-center">Submit
-                                            </button></a>
-
+                                            </button>
+                                        </a>
                                     </div>
                                     <div style="padding-top: 10px" class="col-md-4 col-sm-12">
                                         <input type="reset" class="btn btn-success rounded-3 justify-content-center "
                                             name="Reset">
                                     </div>
+                                    
                                     <div style="padding-top: 10px" class="col-md-4 col-sm-12">
-                                        <a href="{{ route('viewdata') }}"> <button type="button"
-                                                class="btn btn-success rounded-3 justify-content-center">Preview</button></a>
+                                        <a href="{{ url('/viewdata') }}"> <button type="button"
+                                        class="btn btn-success rounded-3 justify-content-center">Preview</button></a>
                                     </div>
+                                    
+                                   
                                 </div>
                             </div>
                         </div>
-                                    </div>
-                                    </div>
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-
-
 </div>
-{{-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-              
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-</div>
-@endif
-
-{{ __('You are logged in!') }}
-</div>
-</div>
-</div>
-</div>
-</div> --}}
-
 @endsection
 @section('script')
     <script>

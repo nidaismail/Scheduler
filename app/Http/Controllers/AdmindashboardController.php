@@ -92,6 +92,7 @@ class AdmindashboardController extends Controller
                 [$start, $end] = explode(' - ', $interval);
 
                 $schedulesQuery = Schedule::where('date', '=', $currentdate)
+                    ->where('admissible', '=', 0)
                     ->where('location_id', $location->id)
                     ->where(function ($query) use ($start, $end) {
                         $query->where('time_from', '>=', $start)
@@ -133,6 +134,7 @@ class AdmindashboardController extends Controller
         $endDate = $request->input('end_date');
 
         $schedules = Schedule::with(['user', 'activity', 'location'])
+            ->where('admissible', '=', 0)
             ->where('class_id', $classId)
             ->whereBetween('date', [$startDate, $endDate])
             ->orderBy('date')
@@ -208,6 +210,7 @@ class AdmindashboardController extends Controller
             $selectedDays = [$day]; // Assuming day is a single value, change as needed
 
             $existingSchedules = Schedule::where('location_id', $location_id)
+                ->where('admissible', '=', 0)
                 ->whereIn('day', $selectedDays)
                 ->where('id', '<>', $id) // Exclude the current schedule from the check
                 ->get();

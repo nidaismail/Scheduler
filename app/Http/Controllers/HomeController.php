@@ -48,12 +48,21 @@ class HomeController extends Controller
         });
 
         // $supervisor = Auth::user()->
-        return view('home')->with('activities', $activities)
+        return view('admin.home')->with('activities', $activities)
             ->with('locations', $locations)
             ->with('clas', $clas)
             ->with('persons', $persons)
             ->with('defaultActivityId', $defaultActivityId);
     }
+    public function userindex()
+    {
+        $persons = User::all()->sortBy(function ($person) {
+            return $person->name;
+        });
+        $user = Auth::user();
+        return view('userHome', compact('user', 'persons'));
+    }
+
     public function store(Request $request)
     {
         try {
@@ -105,6 +114,7 @@ class HomeController extends Controller
                         // Check for conflicting schedules
                         $existingSchedules = Schedule::where('location_id', $locationId)
                             ->where('date', $date->format('Y-m-d'))
+                            ->where('admissible', 0)
                             ->where(function ($query) use ($startTime, $endTime) {
                                 $query->whereBetween('time_from', [$startTime, $endTime])
                                     ->orWhereBetween('time_to', [$startTime, $endTime])

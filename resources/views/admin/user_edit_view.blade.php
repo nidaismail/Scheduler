@@ -178,7 +178,7 @@
                     @endforeach
                     </select>
                 </div> 
-                @if (in_array(Auth::user()->userID, [2558, 188]))
+               
                 <div class="input-group">
                     <h5>Date</h5>
                     <div class="rs-select2 js-select-simple select--no-search">
@@ -221,7 +221,7 @@
                     </div>
                 </div> 
                 
-                   @endif    
+                   
                               
                     <br>
                     

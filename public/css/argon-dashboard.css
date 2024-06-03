@@ -20789,6 +20789,12 @@ pre>code.highlight {
   }
   
   }
- 
+  .disabled {
+    pointer-events: none;
+    opacity: 0.65;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
 
 /*# sourceMappingURL=dashboard-free.css.map */

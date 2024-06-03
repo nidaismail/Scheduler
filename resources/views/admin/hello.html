@@ -1,0 +1,95 @@
+<div class="Find_A_Doc_Container">
+    <div class="Find_A_Doc_Filter_Container">
+        <input type="text" id="searchInput" class="Find_A_Doc_Search" onkeyup="filterFunction()" placeholder="Search Doctor Name">
+        <select id="specialtySelect" class="Find_A_Doc_Specialty" onchange="filterFunction()">
+            <option value="">All Specialties</option>
+            <option value="Cardiac anesthesia">Cardi</option>
+            <option value="Critical care medicine">Critical care medicine</option>
+            <option value="Anesthesia & Critical Care Medicine">Anesthesia & Critical Care Medicine</option>
+            <option value="Orthopedic Trauma">Orthopedic Trauma</option>
+            <option value="Open and Endoscopic Urological Surgeries">Open and Endoscopic Urological Surgeries</option>
+            <option value="Laparoscopic Surgery Procedures">Laparoscopic Surgery Procedures</option>
+            <option value="Treatment for Obesity">Treatment for Obesity</option>
+            <option value="Basic General Surgical procedures">Basic General Surgical procedures</option>
+            <option value="Cancers Surgeries">Cancers Surgeries</option>
+            <option value="Ophthalmology">Ophthalmology</option>
+            <option value="Emergency Medicine Isolation Critical Care">Emergency Medicine Isolation Critical Care</option>
+        </select>
+    </div>
+    <table id="doctorTable" class="Find_A_Doc_Table">
+        <thead>
+            <tr>
+                <th class="Find_A_Doc_Table_Header">Name</th>
+                <th class="Find_A_Doc_Table_Header">Speciality</th>
+                <th class="Find_A_Doc_Table_Header">Job Title</th>
+                <th class="Find_A_Doc_Table_Header">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/05/Khawaja_Kamal_nasir-700x700.jpg" alt="Dr. Khawaja Kamal Nasir" class="Find_A_Doc_Image">
+                    Dr. Khawaja Kamal Nasir
+                </td>
+                <td>Cardiac anesthesia, Critical care medicine</td>
+                <td>Consultant</td>
+                <td><button class="Find_A_Doc_Action_Button">Profile</button> <button class="Find_A_Doc_Action_Button">Book</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/05/WhatsApp-Image-2024-05-21-at-1.30.48-PM-700x700.jpeg" alt="Dr. Syed Rameez Hassan" class="Find_A_Doc_Image">
+                    Dr. Syed Rameez Hassan
+                </td>
+                <td>Anesthesia & Critical Care Medicine</td>
+                <td>Consultant</td>
+                <td><button class="Find_A_Doc_Action_Button">Profile</button> <button class="Find_A_Doc_Action_Button">Book</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/05/WhatsApp-Image-2024-05-14-at-3.13.25-PM-700x700.jpeg" alt="Dr. Muhammad Rehman" class="Find_A_Doc_Image">
+                    Dr. Muhammad Rehman
+                </td>
+                <td>Orthopedic Trauma</td>
+                <td>Consultant</td>
+                <td><button class="Find_A_Doc_Action_Button">Profile</button> <button class="Find_A_Doc_Action_Button">Book</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/05/WhatsApp-Image-2024-05-07-at-10.39.28-AM-700x700.jpeg" alt="Dr. Monib Ahmad" class="Find_A_Doc_Image">
+                    Dr. Monib Ahmad
+                </td>
+                <td>Open and Endoscopic Urological Surgeries</td>
+                <td>Consultant</td>
+                <td><button class="Find_A_Doc_Action_Button">Profile</button> <button class="Find_A_Doc_Action_Button">Book</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/04/Prof-Dr.-Ahmad-Raza-HOD-General-Surgery-700x700.jpg" alt="Prof. Dr. Ahmad Raza" class="Find_A_Doc_Image">
+                    Prof. Dr. Ahmad Raza
+                </td>
+                <td>Laparoscopic Surgery Procedures, Treatment for Obesity, Basic General Surgical procedures, Cancers Surgeries</td>
+                <td>Consultant</td>
+                <td><button class="Find_A_Doc_Action_Button">Profile</button> <button class="Find_A_Doc_Action_Button">Book</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/04/Dr.-Ali-Tayyab-Prof-Ophthalmology-700x700.jpg" alt="Prof. Dr. Ali Tayyab" class="Find_A_Doc_Image">
+                    Prof. Dr. Ali Tayyab
+                </td>
+                <td>Ophthalmology</td>
+                <td>Consultant</td>
+                <td><button class="Find_A_Doc_Action_Button">Profile</button> <button class="Find_A_Doc_Action_Button">Book</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://danthospital.com/test/wp-content/uploads/2024/04/Prof-Khalid-Hassan-Chief-Pathologist-Pathology-700x700.jpg" alt="Prof. Dr. Khalid Hassan" class="Find_A_Doc_Image">
+                    Prof. Dr. Khalid Hassan
+                </td>
+                <td>Emergency Medicine Isolation Critical Care</td>
+                <td>Consultant</td>
+                <td><button class="Find_A_Doc_Action_Button">Profile</button> <button class="Find_A_Doc_Action_Button">Book</button></td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+    </div>

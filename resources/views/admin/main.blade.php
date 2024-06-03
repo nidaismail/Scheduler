@@ -217,8 +217,19 @@
             </div>
             
             <div class="d-flex">
-                <a class="btn btn-custom" href="{{url('/home')}}">
+                <a class="btn btn-custom" href="{{url('/userhome')}}">
                     <i class="ni ni-single-02 text-yellow"></i> Home
+                </a>
+                @hasanyrole(['admin','Superadmin'])
+                <a class="btn btn-custom mr-2" href="{{url('/modify')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Update Schedules
+                </a>
+                <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>User Information Adddition
+                </a>
+                @endhasanyrole
+                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Person Activity
                 </a>
                 
                 <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
@@ -227,12 +238,18 @@
                 <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Campus Activity
                 </a>
+                <a class="btn btn-custom mr-2 disabled" href=" {{url('/roles')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Locations Activity
+                </a>
+                
                 <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i>Monthly Schedule
                 </a>
-                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i> Person Activity
-                </a>
+                @hasexactroles('user')
+            <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i>Edit
+            </a>
+            @endhasexactroles
             </div>
         </div>
     </header>
@@ -242,7 +259,8 @@
             <div class="container-fluid">
                 <!-- Brand -->
                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-                    href="{{url('/admin')}}">Location Activity Dashboard</a>
+                    href="">Location Activity Dashboard</a>
+                    <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{{ Auth::user()->name }}</p>
             </div>
         </nav>
         <!-- End Navbar -->

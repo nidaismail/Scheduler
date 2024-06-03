@@ -18450,7 +18450,7 @@ textarea[resize="horizontal"] {
 .table td,
 .table th {
   font-size: 0.9125rem;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 
 .table.align-items-center td,
@@ -20911,6 +20911,12 @@ div .col-md-3 {
   .btn{
     margin-left: 0px !important;
   }
+}
+.disabled {
+  pointer-events: none;
+  opacity: 0.65;
+  cursor: not-allowed;
+  text-decoration: none;
 }
 
 

@@ -279,6 +279,16 @@ $(document).ready(function() {
     background-color: #fff;
     z-index: 1;
 }
+/* Target the table header */
+
+
+
+/* Target the table data */
+
+
+
+
+
 @media (max-width: 767px) {
     .btn {
         margin-left: 0px !important;
@@ -390,21 +400,37 @@ $(document).ready(function() {
                 </div>
             </div>
             <div class="d-flex">
-                <a class="btn btn-custom" href="{{url('/home')}}">
+                <a class="btn btn-custom" href="{{url('/userhome')}}">
                     <i class="ni ni-single-02 text-yellow"></i> Home
+                </a>
+                @hasanyrole(['admin','Superadmin'])
+                <a class="btn btn-custom mr-2" href="{{url('/modify')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Update Schedules
+                </a>
+                <a class="btn btn-custom mr-2 disabled" href="{{url('/mutable')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>User Information Adddition
+                </a>
+                @endhasanyrole
+                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Person Activity
                 </a>
                 <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Class Activity
                 </a>
-                <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
+                <a class="btn btn-custom mr-2 " href="{{url('/locationadmin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Campus Activity
+                </a>
+                <a class="btn btn-custom mr-2" href=" {{url('/roles')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Locations Activity
                 </a>
                 <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i>Monthly Schedule
                 </a>
-                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i> Person Activity
+                @hasexactroles('user')
+                <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Edit
                 </a>
+                @endhasexactroles
             </div>
         </div>
     </header>
@@ -415,6 +441,7 @@ $(document).ready(function() {
                 <!-- Brand -->
                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
                     href="{{url('/admin')}}">Edit Schedules</a>
+                <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{{ Auth::user()->name }}</p>
             </div>
         </nav>
         <!-- End Navbar -->
@@ -445,7 +472,7 @@ $(document).ready(function() {
                                             <div class="row justify-content-center given-mar">
                                                 <div class="col-lg-12">
                                                     <div class="row justify-content-between">
-                                                        <div class="col-lg-2 col-md-4 col-sm-12 mb-3">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label for="input_from" style="color: grey; font-size: 16px; font-weight: bold; text-transform: uppercase;">Date From</label>
                                                                 <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
@@ -453,8 +480,8 @@ $(document).ready(function() {
                                                                     style="" required value="{{ date('Y-m-d') }}">
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-1 col-md-4"></div> 
-                                                        <div class="col-lg-2 col-md-4 col-sm-12 mb-3">
+                                                        <div class="col-md-1"></div>
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label for="input_to" style="color: grey; font-size: 16px; padding-left:14px; font-weight: bold; text-transform: uppercase;">Date To</label>
                                                                 <input type="date" data-date="" data-date-format="DD MMMM YYYY"
@@ -464,7 +491,7 @@ $(document).ready(function() {
                                                             </div>
                                                         </div>
                                                         {{-- <div class="col-md-1"></div> --}}
-                                                        <div class="col-lg-3 col-md-4 col-sm-12 mb-3">
+                                                        <div class="col-md-3">
                                                             <div style="padding-left: 0rem; ">
                                                                 <div class="form-group">
                                                                     <div class="dropdown">
@@ -485,7 +512,7 @@ $(document).ready(function() {
                                                             </div>
                                                         </div>
                                                         {{-- <div class="col-md-1"></div> --}}
-                                                        <div class="col-lg-2 col-md-4 col-sm-12 mb-3">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <div class="dropdown">
                                                                     <button class="btn btn-success form-control dropdown-toggle btn-block" type="button" id="classDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 1.8rem;">
@@ -504,7 +531,7 @@ $(document).ready(function() {
                                                             </div>
                                                         </div>
                                                         {{-- <div class="col-md-1"></div> --}}
-                                                        <div class="col-lg-2 col-md-4 col-sm-12 mb-3"><button type="submit" class="btn btn-success rounded-3  btn-block" style="margin-top: 1.8rem ; margin-left: 3.8rem;">Get Schedules</button>
+                                                        <div class="col-md-2"><button type="submit" class="btn btn-success rounded-3  btn-block" style="margin-top: 1.8rem ; margin-left: 3.8rem;">Get Schedules</button>
                                                         </div>
                                                             
 
@@ -593,12 +620,13 @@ $(document).ready(function() {
                                         <th style="width: 110px;"><b>Day</b></th>
                                         <th style="width: 90px;">Time From</th>
                                         <th style="width: 90px;">Time To</th>
-                                        <th style="width: 200px;">Person</th>
+                                        <th style="width: 150px;">Person</th>
                                         <th style="width: 150px;">Activity</th>
                                         <th style="width: 120px;">Class</th>
                                         <th style="width: 200px;">Location</th>
-                                        <th style="width: 200px;">Remarks</th>
-                                       
+                                        <th style="width: 200px;">Topic</th>
+                                        <th id="personColumn" style="display: none; width: 250px;">Person</th>
+                                        <th id="remarksColumn" style="display: none; width: 180px;">Topic</th>
                                     </tr>
                                 </thead>
                              <!-- Table Body -->
@@ -606,7 +634,7 @@ $(document).ready(function() {
                                     @foreach ($schedules as $schedule)
                                     <tr>
                                         <td class="schedule-id" style="display: none;"> {{ $schedule->id }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($schedule->date)->format('d F, Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($schedule->date)->format('d F, Y') }}</td> 
                                         <td>{{ date('l', strtotime($schedule->date)) }}</td>
                                         <td>{{ \Carbon\Carbon::parse($schedule->time_from)->format('h:i A') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($schedule->time_to)->format('h:i A') }}</td>
@@ -614,7 +642,8 @@ $(document).ready(function() {
                                         <td>{{ $schedule->activity->activity_name }}</td>
                                         <td>{{ $schedule->class->class_name }}</td>
                                         <td>{{ $schedule->location->location }}</td>
-                                        <td>{{ $schedule->remarks }}</td>
+                                        
+                                        <td class="remarkstd">{{ $schedule->remarks }}</td>
                                         {{-- <td>
                                             <input type="checkbox" class="schedule-checkbox individualCheckbox" data-schedule-id="{{ $schedule->id }}">
                                         </td> --}}
@@ -636,6 +665,7 @@ $(document).ready(function() {
                                                         @endforeach
                                                     </div>
                                                 </div>
+                                                
                                             </div>
                                         </td>
                                         <td class="remarksData" style="display: none;">
