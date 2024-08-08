@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>
-      Dashboard
+      Campus Activity Dashboard
     </title>
     <!-- Favicon -->
     <link href="./images/favicon.png" rel="icon" type="image/png"> 
@@ -55,7 +55,12 @@
         });
     });
 </script>
-
+<script>
+    function showTooltip() {
+        var paragraph = document.getElementById("tooltip-paragraph");
+        paragraph.classList.toggle("show-tooltip");
+    }
+</script>
 <body class="">
   <style>
     .body{}
@@ -97,11 +102,11 @@
 
 .static-column:nth-child(2) {
     left: 171px;
-    width: 280px;
+    width: 200px;
 }
 .static-column:nth-child(3) {
-    left: 320px;
-    width: 310px;/* Adjust based on the width of the first static column */
+    left: 312px;
+    width: 150px;/* Adjust based on the width of the first static column */
    
 }
 .btn-custom {
@@ -168,6 +173,12 @@
                             <i class="ni ni-single-02 text-yellow"></i> Home
                         </a>
                     </li>
+                    <li class="nav-item">
+                    <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                      <i class="ni ni-key-25 text-info"></i>Edit
+                    </a>
+                    </li>
+           
                 </ul>
             </div>
         </div>
@@ -206,21 +217,33 @@
                     </div>
                 </div>
             </div>
-            
+           
             <div class="d-flex">
+                @if (Auth::user()->userID == 2254)
+                <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Campus Activity
+                </a>
+                @else
                 <a class="btn btn-custom" href="{{url('/home')}}">
                     <i class="ni ni-single-02 text-yellow"></i> Home
                 </a>
-                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i> Person Activity
-                </a>
+                
                 <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Class Activity
                 </a>
-                <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
-                    <i class="ni ni-key-25 text-info"></i> Location Activity
+                <a class="btn btn-custom mr-2" href=" {{url('/roles')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Locations Activity
                 </a>
-                
+                {{-- <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Location Activity
+                </a> --}}
+                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Person Activity
+                </a>
+                <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Monthly Schedule
+                </a>
+                @endif
             </div>
 
 
@@ -234,12 +257,12 @@
             <div class="container-fluid">
                 <!-- Brand -->
                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-                    href="{{url('/admin')}}">Dashboard</a>
+                    href="{{url('/admin')}}">Campus Activity Dashboard</a>
             </div>
         </nav>
         <!-- End Navbar -->
         <!-- Header -->
-        <div class="header bg-gradient-primary pb-1 pt-5 pt-md-8">
+        <div class="header bg-gradient-primary pb-1 pt-1 pt-md-8">
             <div class="container-fluid">
                
             </div>
@@ -268,7 +291,9 @@
                     <div class="panel-heading">
                         <div class="pull-right">
                             <form id="location-filter-form" class="form-inline">
+                                
                                 <div class="form-group" style="padding-left: 10px">
+                            
                                     <label for="location-filter" style="color: #16A796; font-size: 14px; margin-bottom: -15px; font-weight: bold;">Filter by Location: </label>
                                     <select id="location-filter" class="form-control" style="font-size: 14px; color: #16A796; margin-bottom: 5px; height: 40px; margin-left: 5px; font-weight: bold;">
                                         <option value="">All Locations</option>
@@ -278,6 +303,11 @@
                                     </select>
                                 </div>
                                 <button type="button" id="applyLocationFilterBtn" class="btn btn-default" style="color: white; margin-left: 10px; margin-bottom: 5px; background: #16A796; font-size: 12px;">Apply</button>
+                                <div class="groups" style="padding-left: 35rem;">
+                                    <button id="tooltip-button" onclick="showTooltip()">Key</button>
+
+                                    <p id="tooltip-paragraph" style="color: #16A796; font-size: 14px; margin-bottom: 5px; font-weight: bold;">Logistics = <span style="color:red">Seating Capacity</span><span style="color:#525F7F">/</span>Sound System<span style="color:#525F7F">/</span><span style="color:red">Display</span><span style="color:#525F7F">/</span>Exam Capacity [P = Projector, L = LCD, Y = Yes, N = No]</p>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -309,15 +339,17 @@
                                         <tr>
                                             <!-- Static columns -->
                                             <th class="static-column" style="font-size: 12px; font-weight: bold; padding-right: 7rem">Location</th>
-                                            <th class="static-column" style="font-size: 12px; font-weight: bold;">Logistics</th>
+                                            <th class="static-column info" style="font-size: 12px; font-weight: bold;">Logistics
+                                            
+                                            </th>
                                             <!-- New column for occupied/unoccupied hours -->
-                                            <th class="static-column" style="font-size: 12px; font-weight: bold;">Utility</th>
+                                            <th class="static-column info" style="font-size: 12px; font-weight: bold;">Utility</th>
                                             <!-- Scrollable columns -->
                                             @foreach ($timeIntervals as $interval)
                                                 @php
                                                     [$startTime, $endTime] = explode(' - ', $interval); // Splitting start and end times
                                                 @endphp
-                                                <th style="padding-right: 0.1rem; padding-left: 0.1rem;font-size: 12px; font-weight: bold;">
+                                                <th style="padding-right: 0.1rem;  font-size: 12px; font-weight: bold;">
                                                     <div>{{ $startTime }} </div>
                                                     <div>{{ $endTime }}</div>
                                                 </th>
@@ -329,13 +361,13 @@
                             <tr class="location-row location-row-{{ $location->id }}">
                                 <!-- Static column content -->
                                 <td class="static-column">{{ $location->location }}</td>
-                                <td class="static-column">
+                                <td class="static-column info">
                                     <span style="color:red; font-weight: bold;">{{ $location->capacity }} </span><span style="font-weight:bold";>/</span>
                                     <span style="color:#24A884; font-weight: bold;">{{ $location->soundSystem }}</span><span style="font-weight:bold";>/</span>
                                     <span style="color:red; font-weight: bold;">{{ $location->display }}</span><span style="font-weight:bold";>/</span>
                                     <span style="color:#24A884; font-weight: bold;">{{ $location->capacity }}</span>
                                 </td>
-                                <td class="static-column">
+                                <td class="static-column info">
                                     @php
                                         $occupiedHours = 0;
                                         $unoccupiedHours = 0;
@@ -350,8 +382,8 @@
                                             }
                                         @endphp
                                     @endforeach
-                                    <span style= "color:red; font-weight:bold;">{{ $occupiedHours }} hrs </span><span style="font-weight:bold";>-</span>
-                                    <span style= "color:#24A884; font-weight:bold;">{{ $unoccupiedHours }} hrs </span>
+                                    <span style= "color:red; font-weight:bold;">{{ $occupiedHours }}  </span><span style="font-weight:bold";>-</span>
+                                    <span style= "color:#24A884; font-weight:bold;">{{ $unoccupiedHours }}  </span>
                                 </td>
                                 <!-- Scrollable columns content -->
                                 @foreach ($timeIntervals as $interval)

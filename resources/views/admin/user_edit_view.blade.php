@@ -25,6 +25,23 @@
 
     
     <link rel="stylesheet" href="{{ asset('asset/css/main.css') }}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const selectedDate = document.getElementById('selectedDate');
+    const dayOutput = document.getElementById('dayOutput');
+
+    // Function to calculate and set the day based on the selected date
+    selectedDate.addEventListener('change', function() {
+        const selectedValue = this.value;
+        const selectedDate = new Date(selectedValue);
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayOfWeek = days[selectedDate.getDay()];
+
+        // Set the calculated day into the dayOutput field
+        dayOutput.value = dayOfWeek;
+    });
+});
+    </script>
     <style>
    
       #alert{
@@ -131,8 +148,7 @@
                         </div>
                     @endif
                 </div>
-
-                    <div class="form-group">
+                <div class="form-group">
                     <label for="user_id" class="input-label">Person</label>
                     <select id="user_id" class="form-control" name="user_id">
                         @foreach ($users as $user)
@@ -142,7 +158,6 @@
                         @endforeach
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="location_id" class="input-label">Location</label>
                     <select id="location_id" class="form-control" name="location_id">
@@ -153,17 +168,71 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="Activity" class="input-label">Activity</label>
+                    <select id="activity_id" class="form-control" name="activity_id">
+                        @foreach ($activities as $activity)
+                        <option value="{{ $activity->id }}" {{ is_object($schedule->activity) && $schedule->activity->id == $activity->id ? 'selected' : '' }}>
+                            {{ $activity->activity_name }}
+                        </option>
+                    @endforeach
+                    </select>
+                </div> 
+                @if (in_array(Auth::user()->userID, [2558, 126]))
+                <div class="input-group">
+                    <h5>Date</h5>
+                    <div class="rs-select2 js-select-simple select--no-search">
+                        <input id="selectedDate" class="input--style-2" type='date' name='date' value='{{ $schedule->date }}' />
+                    </div>
+                </div>
+                <div class="input-group">
+                    <h5>Day</h5>
+                    <div class="rs-select2 js-select-simple select--no-search">
+                        <input id="dayOutput" class="input--style-2" type='text' name='day' value='{{ $schedule->day }}' readonly>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <h5>Time From</H5>
+                        <div class="rs-select2 js-select-simple select--no-search">
+                            <input class="input--style-2" type='time' name='time_from' value='{{ $schedule->time_from }}' />
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <h5>Time To</H5>
+                            <div class="rs-select2 js-select-simple select--no-search">
+                                <input class="input--style-2" type='time' name='time_to' value='{{ $schedule->time_to }}' />
+                            </div>
+                        </div>
+                 
+                <div class="form-group">
+                    <label for="class_id" class="input-label">Class</label>
+                    <select id="class_id" class="form-control" name="class_id">
+                        @foreach ($grades as $grade)
+                            <option value="{{ $grade->id }}" {{ $schedule->class->id == $grade->id ? 'selected' : '' }}>
+                                {{ $grade->class_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="input-group">
+                    <h5>Remarks</h5>
+                    <div class="rs-select2 js-select-simple select--no-search">
+                        <input class="input--style-2" type='text' name='remarks' value='{{ $schedule->remarks }}' />
+                    </div>
+                </div> 
+                
+                   @endif    
+                              
                     <br>
-                    <br>
-                    <br>
+                    
                       <div>
                     <button style="padding: 10px 20px; background-color: #1BA998; color: white; line-height: 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none;">
-                        Update User
+                        Update
                     </button>
                     <br>
                     <br>
                     <button style="padding: 10px 20px; background-color: #1BA998; color: white; line-height: 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none;">
-                        <span style="margin-right: 5px; font-size: 12px; line-height: 12px;">&#8592;</span> <a href="{{ url('admin') }}">Go Back</a>
+                        <span style="margin-right: 5px; font-size: 12px; line-height: 12px;">&#8592;</span> <a href="{{ url('/modify') }}">Go Back</a>
                     </button>
                     </div>
                 </form>

@@ -264,7 +264,7 @@ th {
 
 label {
   display: inline-block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 button {
@@ -281,7 +281,7 @@ button,
 select,
 optgroup,
 textarea {
-  margin-top: 1rem;
+  margin-top: 0.2rem;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -1667,9 +1667,9 @@ pre code {
   padding: 0.5rem;
 }
 
-.table-bordered {
+/* .table-bordered {
   border: 1px solid #e9ecef;
-}
+} */
 
 .table-bordered th,
 .table-bordered td {
@@ -11035,7 +11035,7 @@ button.bg-darker:focus {
 
   .pt-md-8,
   .py-md-8 {
-    padding-top: 8rem !important;
+    padding-top: 5.6rem !important;
   }
 
   .pr-md-8,
@@ -18421,7 +18421,12 @@ textarea[resize="horizontal"] {
 .separator-skew {
   height: 60px;
 }
-
+.custom-table .custom-header th {
+  font-weight: 900;
+  text-align: center;
+  padding-left: 700px;
+  font-size: 15px; /* Adjust the font size as needed */
+}
 @media (min-width: 1200px) {
   .separator-skew {
     height: 70px;
@@ -20497,7 +20502,7 @@ pre>code.highlight {
   font-size: .875rem;
 }
 .filterable {
-  margin-top: 1.5rem;
+  margin-top: 0.2rem;
   margin-bottom: 1.5rem;
   margin-left: 1rem;
   margin-right: 1rem
@@ -20772,5 +20777,18 @@ pre>code.highlight {
 .ct-footer-links li+li {
   margin-left: 1rem;
 }
+@media only screen and (max-width: 768px) {
+  .container-fluid{
+    padding-top: 15px;
+  }
+  input[type="date"] {
+    margin-top: 25px;
+  }
+  .filterable{
+    margin-top: 2rem;
+  }
+  
+  }
+ 
 
 /*# sourceMappingURL=dashboard-free.css.map */

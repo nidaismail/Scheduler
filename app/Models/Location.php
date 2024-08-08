@@ -9,4 +9,9 @@ class Location extends Model
 {
     use HasFactory;
     public $table = 'location';
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
 }
