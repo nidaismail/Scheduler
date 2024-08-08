@@ -178,19 +178,6 @@ $(document).ready(function () {
         };
     });
 
-<<<<<<< HEAD
-    // Function to update the button text when a person is selected
-    function updateButtonText() {
-        var selectedPersons = [];
-        // Loop through all checked checkboxes and get their corresponding labels
-        $('.person-item input[type="checkbox"]:checked').each(function () {
-            var label = $(this).siblings('label').text();
-            selectedPersons.push(label);
-        });
-        // Update the button text with the selected persons
-        $('#personsDropdown').text(selectedPersons.join(', ') || 'Select Persons');
-    }
-=======
     // // Function to update the button text when a person is selected
     // function updateButtonText() {
     //     var selectedPersons = [];
@@ -202,7 +189,6 @@ $(document).ready(function () {
     //     // Update the button text with the selected persons
     //     $('#personsDropdown').text(selectedPersons.join(', ') || 'Select Persons');
     // }
->>>>>>> e905996f0d85753db0090882a3740de079a99306
 
     // Search for persons in the dropdown
     $('#personSearch1, #personSearch2').on('input', function () {
@@ -215,22 +201,8 @@ $(document).ready(function () {
         dropdownContainer.find('.person-item:contains("' + searchQuery + '")').show();
         // Update the button text when searching
         updateButtonText();
-<<<<<<< HEAD
     });
 
-    // Handle checkbox change event to update button text
-    $('.person-item input[type="checkbox"]').on('change', function () {
-        updateButtonText();
-=======
->>>>>>> e905996f0d85753db0090882a3740de079a99306
-    });
-
-    // // Handle checkbox change event to update button text
-    // $('.person-item input[type="checkbox"]').on('change', function () {
-    //     updateButtonText();
-    // });
-
-    // Search for classes in the dropdown
     $('#classSearch, #classSearch2').on('input', function () {
         var searchQuery = $(this).val().toLowerCase();
         // Find the dropdown container
@@ -272,11 +244,7 @@ $(document).ready(function () {
     @endif
 
     
-<<<<<<< HEAD
-    <form id ="storeform" class="myform" method="POST" action="{{ route('save') }}" onsubmit="return validate();">
-=======
     <form class="myform" method="POST" action="{{ route('save') }}" onsubmit="return validate();">
->>>>>>> e905996f0d85753db0090882a3740de079a99306
         @csrf
         <div class="container px-lg-5">
             
@@ -287,7 +255,6 @@ $(document).ready(function () {
                 </div> --}}
                 <div class="content">
                     <div class="container text-left">
-                        <!-- Success/Error Messages -->
                         <div class="row p-4 justify-content-center" id="successMessage">
                             @if(session()->has('success'))
                             <div class="alert alert-success">
@@ -303,7 +270,6 @@ $(document).ready(function () {
                             </div>
                             @endif
                         </div>
-    
                         <div id="alert" class="error-msg" role="alert">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             <span style="">
@@ -311,10 +277,11 @@ $(document).ready(function () {
                             </span>
                         </div>
                         <div class="row justify-content-center given-mar">
-                            <div class="col-lg-7">
+                            <div class="col-lg-12">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-group">
+                                            
                                             <label for="input_from">Select</label>
                                             <input type="radio" id="id" value="Class" name="category" class="pad">
                                             <label for="" class="cat">Class</label>
@@ -323,20 +290,14 @@ $(document).ready(function () {
                                             <label for="" class="cat">Person</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 removed" id="displayPerson">
+                                    <div class="col-md-3 removed" id="displayPerson">
                                         <div class="form-group">
+                                            <label for="input_from">Person</label>
                                             <div class="dropdown">
-<<<<<<< HEAD
-                                                <button class="form-control dropdown-toggle" type="button" id="personsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Select Persons
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="personsDropdown">
-=======
                                                 <button class="form-control dropdown-toggle" type="button" id="personsDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Select Persons
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="personsDropdown1">
->>>>>>> e905996f0d85753db0090882a3740de079a99306
                                                     <input type="text" id="personSearch1" class="form-control" placeholder="Search Persons...">
                                                     @foreach($persons as $person)
                                                         <div class="form-check person-item">
@@ -350,8 +311,9 @@ $(document).ready(function () {
                                     </div>
                                     
                                     
-                                    <div class="col-md-6 removedClass" id="displayClass">
+                                    <div class="col-md-3 removedClass" id="displayClass">
                                         <div class="form-group">
+                                            <label for="input_from">Class</label>
                                             <div class="dropdown">
                                                 <button class="form-control dropdown-toggle @error('class') is-invalid @enderror" type="button" id="classDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Select Class
@@ -371,9 +333,113 @@ $(document).ready(function () {
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="input_from">Date From</label>
+                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
+                                                   name="start_date" class="form-control" id="start_date" placeholder=""
+                                                   required value="{{ old('start_date', date('Y-m-d')) }}">
+                                        </div>
+ 
+                                     </div>
+                                     <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="input_to">Date To</label>
+                                            @php
+                                                // Get the current year and month
+                                                $currentYear = date('Y');
+                                                $currentMonth = date('m');
+                                                
+                                                // Calculate the end date of the current month
+                                                $endOfMonth = date('Y-m-t', strtotime("$currentYear-$currentMonth-01"));
+                                            @endphp
+                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY"
+                                                   name="end_date" class="form-control" id="end_date"
+                                                   placeholder="End Date" required
+                                                   value="{{ old('end_date', $endOfMonth) }}">
+                                        </div>
+                                        
+                                    </div>
                                     
                                 </div>
                             </div> 
+                       
+                        {{-- <div class="row justify-content-center given-mar">
+                            <div class="col-lg-7">
+                                <div action="#" class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="input_from">Date From</label>
+                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
+                                                   name="start_date" class="form-control" id="start_date" placeholder=""
+                                                   required value="{{ old('start_date', date('Y-m-d')) }}">
+                                        </div>
+ 
+                                     </div>
+                                    {{-- @php
+                                    $today = \Carbon\Carbon::now(); //Current Date and Time
+                                   $lastDayofMonth =    \Carbon\Carbon::parse($today)->endOfMonth()->toDateString();
+                                   dd($lastDayofMonth);
+                                   @endphp --}}
+                                   {{-- <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="input_to">Date To</label>
+                                        @php
+                                            // Get the current year and month
+                                            $currentYear = date('Y');
+                                            $currentMonth = date('m');
+                                            
+                                            // Calculate the end date of the current month
+                                            $endOfMonth = date('Y-m-t', strtotime("$currentYear-$currentMonth-01"));
+                                        @endphp
+                                        <input type="date" data-date="" data-date-format="DD MMMM YYYY"
+                                               name="end_date" class="form-control" id="end_date"
+                                               placeholder="End Date" required
+                                               value="{{ old('end_date', $endOfMonth) }}">
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </div> --}} 
+                        <div class="row justify-content-center given-mar">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="input_from">Time From</label>
+                                            <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror" id="start_time" value="{{ old('start_time', '08:00') }}" required>
+                                            @error('start_time')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="input_to">Time To</label>
+                                            <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror" id="end_time" value="{{ old('end_time', '15:00') }}" required>
+                                            @error('end_time')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="size">Slot Size</label>
+                                            <select name="size" id="size" class="form-control @error('size') is-invalid @enderror" required>
+                                                <option value="" disabled>Select a Slot</option>
+                                                
+                                            </select>
+                                            @error('activity')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="form-group">
                                 <div class="dowPicker">
@@ -413,124 +479,6 @@ $(document).ready(function () {
                         </div>
                         <div class="row justify-content-center given-mar">
                             <div class="col-lg-7">
-                                <div action="#" class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="input_from">Date From</label>
-                                            <input type="date" data-date="" data-date-format="DD MMMM YYYY" min="0"
-                                                   name="start_date" class="form-control" id="start_date" placeholder=""
-                                                   required value="{{ old('start_date', date('Y-m-d')) }}">
-                                        </div>
- 
-                                     </div>
-                                    {{-- @php
-                                    $today = \Carbon\Carbon::now(); //Current Date and Time
-                                   $lastDayofMonth =    \Carbon\Carbon::parse($today)->endOfMonth()->toDateString();
-                                   dd($lastDayofMonth);
-                                   @endphp --}}
-                                   <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="input_to">Date To</label>
-                                        @php
-                                            // Get the current year and month
-                                            $currentYear = date('Y');
-                                            $currentMonth = date('m');
-                                            
-                                            // Calculate the end date of the current month
-                                            $endOfMonth = date('Y-m-t', strtotime("$currentYear-$currentMonth-01"));
-                                        @endphp
-                                        <input type="date" data-date="" data-date-format="DD MMMM YYYY"
-                                               name="end_date" class="form-control" id="end_date"
-                                               placeholder="End Date" required
-                                               value="{{ old('end_date', $endOfMonth) }}">
-                                    </div>
-                                    
-                                </div>
-                                
-                            </div>
-                        </div>
-<<<<<<< HEAD
-                        </div>
-=======
->>>>>>> e905996f0d85753db0090882a3740de079a99306
-
-
-                        <div class="row justify-content-center given-mar">
-                            <div class="col-lg-7">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="input_from">Time From</label>
-                                            <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror" id="start_time" value="{{ old('start_time', '08:00') }}" required>
-                                            @error('start_time')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="input_to">Time To</label>
-                                            <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror" id="end_time" value="{{ old('end_time', '15:00') }}" required>
-                                            @error('end_time')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row justify-content-center given-mar">
-                            <div class="col-lg-7">
-<<<<<<< HEAD
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="activity">Activity</label>
-                                        <select name="activity" id="activity" class="form-control @error('activity') is-invalid @enderror" required>
-                                            <option value="" disabled>Select Activity</option>
-                                            @foreach($activities as $act)
-                                                <option value="{{$act->id}}" @if($act->id == old('activity', $defaultActivityId)) selected @endif>{{$act->activity_name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('activity')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                
-                                <!-- Location Field (will toggle based on activity) -->
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="location">Location</label>
-                                        <div id="locationFieldContainer">
-                                            <!-- Checkbox field, initially hidden -->
-                                            <div id="locationCheckboxField" class="d-none">
-                                                <div class="dropdown">
-                                                    <button class="form-control dropdown-toggle" type="button" id="locationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        Select Locations
-                                                    </button>
-                                                    <div class="dropdown-menu p-0" aria-labelledby="locationDropdown" style="max-height: 300px; overflow-y: auto; padding:10px;">
-                                                        <input type="text" id="locationSearch" class="form-control mb-2" placeholder="Search Locations...">
-                                                        <div id="locationList" style="padding-left: 20px">
-                                                            @foreach($locations as $loc)
-                                                                <div class="form-check location-item">
-                                                                    <input type="checkbox" name="location[]" id="location_{{ $loc->id }}" value="{{ $loc->id }}" class="form-check-input location-checkbox">
-                                                                    <label class="form-check-label" for="location_{{ $loc->id }}">{{ $loc->location }}</label>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                
-                                            <!-- Select field, initially visible -->
-                                            <select name="location[]" id="locationSelectField" class="form-control @error('location') is-invalid @enderror location-select">
-                                                <option value="" disabled selected>Select Location</option>
-                                                @foreach($locations as $loc)
-                                                    <option value="{{ $loc->id }}" {{ in_array($loc->id, old('location', [])) ? 'selected' : '' }}>{{ $loc->location }}</option>
-=======
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -554,49 +502,25 @@ $(document).ready(function () {
                                                 <option value="" disabled selected>Select Location</option>
                                                 @foreach($locations as $loc)
                                                     <option value='{{$loc->id}}' {{ old('location') == $loc->id ? 'selected' : '' }}>{{$loc->location}}</option>
->>>>>>> e905996f0d85753db0090882a3740de079a99306
                                                 @endforeach
                                             </select>
                                             @error('location')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-<<<<<<< HEAD
-                                        @error('location')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                
-                                
-                            </div>
-                        </div>
-                        </div>
-                            <br>
-                            <br>
-                            <div class="row justify-content-center given-mar">
-                            <div class="col-lg-7">
-                                <div class="row">
-                            <div class="col-md-6 hidden" id="showPerson">
-=======
                                         
                                     </div>
                                     <br>
                                     <br>
 
                                     <div class="col-md-6 hidden" id="showPerson">
->>>>>>> e905996f0d85753db0090882a3740de079a99306
                                         <label for="persons[]">Person</label>
                                         <div class="form-group">
                                             <div class="dropdown">
                                                 <button class="form-control dropdown-toggle" type="button" id="personsDropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Select Persons
                                                 </button>
-<<<<<<< HEAD
-                                                <div class="dropdown-menu" aria-labelledby="personsDropdown">
-=======
                                                 <div class="dropdown-menu" aria-labelledby="personsDropdown2">
->>>>>>> e905996f0d85753db0090882a3740de079a99306
                                                     <input type="text" id="personSearch2" class="form-control" placeholder="Search Persons...">
                                                     @foreach($persons as $person)
                                                         <div class="form-check person-item">
@@ -611,8 +535,6 @@ $(document).ready(function () {
                                             @enderror
                                         </div>
                                     </div>
-                                    
-                                  
                                     <div class="col-md-6 hiddenClass" id="showClass">
                                         <label for="class">Class</label>
                                         <div class="form-group">
@@ -635,14 +557,9 @@ $(document).ready(function () {
                                             @enderror
                                         </div>
                                     </div>
-                                    
                                     <div class="col-md-6">
                                         <div class="form-group">
-<<<<<<< HEAD
                                             <label for="remarks">Topic</label>
-=======
-                                            <label for="remarks">Remarks</label>
->>>>>>> e905996f0d85753db0090882a3740de079a99306
                                             <input type="text" name="remarks" id="remarks" class="form-control @error('remarks') is-invalid @enderror" value="{{ old('remarks') }}" required>
                                             @error('remarks')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -651,130 +568,41 @@ $(document).ready(function () {
                                     </div>
                                     
                                 </div>
-                                </div>
                             </div>
-                     
+                        </div>
                         <div class="row justify-content-center">
                             <div class="col-lg-7 col-md-">
                                 <div class="row">
                                     <div style="padding-top: 10px" class="col-md-4 col-sm-12">
-                                        <button type="submit" class="btn btn-success rounded-3 justify-content-center">Submit</button>
+                                        <a href="{{ route('save') }}" id="schedule-form"> <button type="submit"
+                                                class="btn btn-success rounded-3 justify-content-center">Submit
+                                            </button>
+                                        </a>
                                     </div>
                                     <div style="padding-top: 10px" class="col-md-4 col-sm-12">
                                         <input type="reset" class="btn btn-success rounded-3 justify-content-center "
                                             name="Reset">
                                     </div>
+                                    
                                     <div style="padding-top: 10px" class="col-md-4 col-sm-12">
-                                        <a href="{{ route('viewdata') }}"> <button type="button"
-                                                class="btn btn-success rounded-3 justify-content-center">Preview</button></a>
+                                        <a href="{{ url('/viewdata') }}"> <button type="button"
+                                        class="btn btn-success rounded-3 justify-content-center">Preview</button></a>
                                     </div>
+                                    
+                                   
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
     </form>
-
-
 </div>
-{{-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-              
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-</div>
-@endif
-
-{{ __('You are logged in!') }}
-</div>
-</div>
-</div>
-</div>
-</div> --}}
-
 @endsection
 @section('script')
-<<<<<<< HEAD
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-$(document).ready(function() {
-    const activitySelect = $('#activity');
-    const locationCheckboxField = $('#locationCheckboxField');
-    const locationSelectField = $('#locationSelectField');
-    const form = $('form'); // Assuming your form has no other form tags on the page
-
-    // Function to update location field based on activity
-    function updateLocationField(activityId) {
-        if (activityId === 2 || activityId === 5) {
-            locationCheckboxField.removeClass('d-none');
-            locationSelectField.addClass('d-none');
-        } else {
-            locationCheckboxField.addClass('d-none');
-            locationSelectField.removeClass('d-none');
-        }
-    }
-
-    // Handle activity change
-    activitySelect.on('change', function() {
-        const selectedActivity = parseInt($(this).val());
-        updateLocationField(selectedActivity);
-    });
-
-    // Initial setup
-    const initialActivity = parseInt(activitySelect.val());
-    updateLocationField(initialActivity);
-
-    // Custom form validation
-    form.on('submit', function(e) {
-        let valid = true;
-        let errorMessage = '';
-
-        // Check which location field is visible and validate accordingly
-        if (locationCheckboxField.hasClass('d-none')) {
-            // Select field is visible, check if it has a selected value
-            if (locationSelectField.val() === null || locationSelectField.val() === '') {
-                valid = false;
-                errorMessage = 'Please select a location.';
-            }
-        } else {
-            // Checkbox field is visible, check if at least one checkbox is checked
-            if (locationCheckboxField.find('input[type="checkbox"]:checked').length === 0) {
-                valid = false;
-                errorMessage = 'Please select at least one location.';
-            }
-        }
-
-        if (!valid) {
-            alert(errorMessage); // Display the error message
-            e.preventDefault(); // Prevent form submission
-        }
-    });
-
-    // Search functionality for location checkboxes
-    $('#locationSearch').on('input', function() {
-        const searchValue = $(this).val().toLowerCase();
-        $('#locationList .location-item').each(function() {
-            const label = $(this).find('label').text().toLowerCase();
-            $(this).toggle(label.includes(searchValue));
-        });
-    });
-});
-
-
-</script>  
-
-        
-=======
     <script>
         $(document).ready(function() {
             $('#start_time').change(function() {
@@ -793,7 +621,6 @@ $(document).ready(function() {
             });
         });
     </script>
->>>>>>> e905996f0d85753db0090882a3740de079a99306
 @push('script')
 
 

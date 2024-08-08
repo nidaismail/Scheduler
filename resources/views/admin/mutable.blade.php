@@ -279,6 +279,19 @@ $(document).ready(function() {
     background-color: #fff;
     z-index: 1;
 }
+<<<<<<< HEAD
+=======
+/* Target the table header */
+
+
+
+/* Target the table data */
+
+
+
+
+
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
 @media (max-width: 767px) {
     .btn {
         margin-left: 0px !important;
@@ -390,6 +403,7 @@ $(document).ready(function() {
                 </div>
             </div>
             <div class="d-flex">
+<<<<<<< HEAD
                 <a class="btn btn-custom" href="{{url('/home')}}">
                     <i class="ni ni-single-02 text-yellow"></i> Home
                 </a>
@@ -405,6 +419,39 @@ $(document).ready(function() {
                 <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Person Activity
                 </a>
+=======
+                <a class="btn btn-custom" href="{{url('/userhome')}}">
+                    <i class="ni ni-single-02 text-yellow"></i> Home
+                </a>
+                @hasanyrole(['admin','Superadmin'])
+                <a class="btn btn-custom mr-2" href="{{url('/modify')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Update Schedules
+                </a>
+                <a class="btn btn-custom mr-2 disabled" href="{{url('/mutable')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>User Information Adddition
+                </a>
+                @endhasanyrole
+                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Person Activity
+                </a>
+                <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Class Activity
+                </a>
+                <a class="btn btn-custom mr-2 " href="{{url('/locationadmin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Campus Activity
+                </a>
+                <a class="btn btn-custom mr-2" href=" {{url('/roles')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Locations Activity
+                </a>
+                <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Monthly Schedule
+                </a>
+                @hasexactroles('user')
+                <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Edit
+                </a>
+                @endhasexactroles
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
             </div>
         </div>
     </header>
@@ -415,6 +462,10 @@ $(document).ready(function() {
                 <!-- Brand -->
                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
                     href="{{url('/admin')}}">Edit Schedules</a>
+<<<<<<< HEAD
+=======
+                <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{{ Auth::user()->name }}</p>
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
             </div>
         </nav>
         <!-- End Navbar -->
@@ -593,12 +644,20 @@ $(document).ready(function() {
                                         <th style="width: 110px;"><b>Day</b></th>
                                         <th style="width: 90px;">Time From</th>
                                         <th style="width: 90px;">Time To</th>
+<<<<<<< HEAD
                                         <th style="width: 200px;">Person</th>
+=======
+                                        <th style="width: 150px;">Person</th>
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
                                         <th style="width: 150px;">Activity</th>
                                         <th style="width: 120px;">Class</th>
                                         <th style="width: 200px;">Location</th>
                                         <th style="width: 200px;">Topic</th>
+<<<<<<< HEAD
                                         <th id="personColumn" style="display: none; width: 180px;">Person</th>
+=======
+                                        <th id="personColumn" style="display: none; width: 250px;">Person</th>
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
                                         <th id="remarksColumn" style="display: none; width: 180px;">Topic</th>
                                     </tr>
                                 </thead>
@@ -615,7 +674,12 @@ $(document).ready(function() {
                                         <td>{{ $schedule->activity->activity_name }}</td>
                                         <td>{{ $schedule->class->class_name }}</td>
                                         <td>{{ $schedule->location->location }}</td>
+<<<<<<< HEAD
                                         <td>{{ $schedule->remarks }}</td>
+=======
+                                        
+                                        <td class="remarkstd">{{ $schedule->remarks }}</td>
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
                                         {{-- <td>
                                             <input type="checkbox" class="schedule-checkbox individualCheckbox" data-schedule-id="{{ $schedule->id }}">
                                         </td> --}}
@@ -637,6 +701,10 @@ $(document).ready(function() {
                                                         @endforeach
                                                     </div>
                                                 </div>
+<<<<<<< HEAD
+=======
+                                                
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
                                             </div>
                                         </td>
                                         <td class="remarksData" style="display: none;">

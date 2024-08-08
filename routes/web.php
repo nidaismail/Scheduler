@@ -14,11 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 // Route::get('/login/{id}', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Auth::routes();
 Route::get('/get-user-details/{userID}', [App\Http\Controllers\Auth\LoginController::class, 'getUserDetails']);
+<<<<<<< HEAD
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/save', [App\Http\Controllers\HomeController::class, 'store'])->name('save');
@@ -45,10 +46,50 @@ Route::middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
     // Route::get('/destroy/{userID}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
     Route::get('/roles', [App\Http\Controllers\UserController::class, 'main']);
     Route::get('/mutable', [App\Http\Controllers\MutableController::class, 'mute'])->name('mutable');
+=======
+
+
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::post('/save', [App\Http\Controllers\HomeController::class, 'store'])->name('save');
+Route::get('/requestResource', [App\Http\Controllers\ResourceRequestController::class, 'requestview'])->name('requestResource');
+Route::post('/saveResource', [App\Http\Controllers\ResourceRequestController::class, 'storeResource'])->name('saveResource');
+
+// Route::get('/index', [App\Http\Controllers\UserController::class, 'index']);
+//Route::get('//location-Check', [App\Http\Controllers\HomeController::class, 'check']); 
+
+
+//Route::get('/view', [App\Http\Controllers\UserdashboardController::class, 'classview'])->name('view');
+
+Route::post('/admissible', [App\Http\Controllers\UserdashboardController::class, 'admissible'])->name('admissible');
+
+Route::post('/check-location-availability', [App\Http\Controllers\HomeController::class, 'checkLocationAvailability'])->name('check-location-availability');
+Route::get('/admin', [App\Http\Controllers\AdmindashboardController::class, 'dataWithdate'])->name('dataWithdate');
+Route::get('/userhome', [App\Http\Controllers\HomeController::class, 'userindex'])->name('userhome');
+Route::get('/classadmin', [App\Http\Controllers\AdmindashboardController::class, 'dataWithclass'])->name('dataWithclass');
+Route::get('/locationadmin', [App\Http\Controllers\AdmindashboardController::class, 'dataWithlocation'])->name('dataWithlocation');
+Route::get('/weekadmin', [App\Http\Controllers\AdmindashboardController::class, 'dataOfWeek'])->name('dataOfWeek');
+Route::get('/getSchedules', [App\Http\Controllers\AdmindashboardController::class, 'getSchedules'])->name('getSchedules');
+Route::get('/class', [App\Http\Controllers\AdmindashboardController::class, 'dataWithLocation'])->name('class');
+Route::get('/create', [App\Http\Controllers\UserController::class, 'create']);
+// Route::get('/edit', [App\Http\Controllers\UserController::class, 'edit']);
+Route::get('/show/{userID}', [App\Http\Controllers\UserController::class, 'show']);
+// Route::get('/destroy/{userID}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
+Route::get('/roles', [App\Http\Controllers\UserController::class, 'main']);
+Route::get('/mutable', [App\Http\Controllers\MutableController::class, 'mute'])->name('mutable');
+Route::post('/updateSchedules', [App\Http\Controllers\MutableController::class, 'updateSchedules']);
+Route::get('/viewdata', [App\Http\Controllers\UserdashboardController::class, 'preview'])->name('viewdata');
+// Route::get('/create', [App\Http\Controllers\RolesController::class, 'index'])->name('create');
+// Route::get('/roles', [App\Http\Controllers\RolesController::class, 'show']);
+Route::middleware(['auth', 'role:admin|Superadmin'])->name('admin.')->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
     Route::get('/modify', [App\Http\Controllers\AdmindashboardController::class, 'dataWithdates']);
     Route::get('edit-records', [App\Http\Controllers\AdmindashboardController::class, 'index']);
     Route::get('edit/{id}', [App\Http\Controllers\AdmindashboardController::class, 'show']);
     Route::post('edit/{id}', [App\Http\Controllers\AdmindashboardController::class, 'edit']);
+<<<<<<< HEAD
     Route::get('delete-records', [App\Http\Controllers\UserdashboardController::class, 'index']);
     Route::delete('delete/{ids}', [App\Http\Controllers\UserdashboardController::class, 'deleteRecords'])->name('delete');
     Route::get('/otherFunctionality', [App\Http\Controllers\UserController::class, 'otherFunctionality'])->name('otherFunctionality');
@@ -56,6 +97,23 @@ Route::middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
     // Route::put('/update-schedule/{id}', [App\Http\Controllers\MutableController::class, 'update'])->name('update-schedule');
     Route::post('/updateSchedules', [App\Http\Controllers\MutableController::class, 'updateSchedules']);
 });
+=======
+
+    Route::get('/otherFunctionality', [App\Http\Controllers\UserController::class, 'otherFunctionality'])->name('otherFunctionality');
+
+    // Route::get('/edit-schedules', [App\Http\Controllers\MutableController::class, 'editSelected']);
+    // Route::put('/update-schedule/{id}', [App\Http\Controllers\MutableController::class, 'update'])->name('update-schedule');
+
+
+
+});
+Route::middleware(['auth', 'role:Superadmin'])->group(function () {
+    Route::get('delete-records', [App\Http\Controllers\UserdashboardController::class, 'index']);
+    Route::delete('delete/{ids}', [App\Http\Controllers\UserdashboardController::class, 'deleteRecords'])->name('delete');
+
+
+});
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', UserController::class);
 });

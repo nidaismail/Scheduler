@@ -18450,7 +18450,11 @@ textarea[resize="horizontal"] {
 .table td,
 .table th {
   font-size: 0.9125rem;
+<<<<<<< HEAD
   /*white-space: nowrap;*/
+=======
+  /* white-space: nowrap; */
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
 }
 
 .table.align-items-center td,
@@ -20912,6 +20916,15 @@ div .col-md-3 {
     margin-left: 0px !important;
   }
 }
+<<<<<<< HEAD
+=======
+.disabled {
+  pointer-events: none;
+  opacity: 0.65;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
 
 
 

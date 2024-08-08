@@ -217,9 +217,26 @@
             </div>
             
             <div class="d-flex">
+<<<<<<< HEAD
                 <a class="btn btn-custom" href="{{url('/home')}}">
                     <i class="ni ni-single-02 text-yellow"></i> Home
                 </a>
+=======
+                <a class="btn btn-custom" href="{{url('/userhome')}}">
+                    <i class="ni ni-single-02 text-yellow"></i> Home
+                </a>
+                @hasanyrole(['admin','Superadmin'])
+                <a class="btn btn-custom mr-2" href="{{url('/modify')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Update Schedules
+                </a>
+                <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>User Information Adddition
+                </a>
+                @endhasanyrole
+                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Person Activity
+                </a>
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
                 
                 <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Class Activity
@@ -227,6 +244,7 @@
                 <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Campus Activity
                 </a>
+<<<<<<< HEAD
                 <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i>Monthly Schedule
                 </a>
@@ -236,6 +254,20 @@
                  <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
                       <i class="ni ni-key-25 text-info"></i>Edit
                     </a>
+=======
+                <a class="btn btn-custom mr-2 disabled" href=" {{url('/roles')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Locations Activity
+                </a>
+                
+                <a class="btn btn-custom mr-2" href="{{url('/getSchedules')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Monthly Schedule
+                </a>
+                @hasexactroles('user')
+            <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i>Edit
+            </a>
+            @endhasexactroles
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
             </div>
         </div>
     </header>
@@ -245,7 +277,12 @@
             <div class="container-fluid">
                 <!-- Brand -->
                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+<<<<<<< HEAD
                     href="{{url('/admin')}}">Location Activity Dashboard</a>
+=======
+                    href="">Location Activity Dashboard</a>
+                    <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{{ Auth::user()->name }}</p>
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
             </div>
         </nav>
         <!-- End Navbar -->
@@ -329,6 +366,7 @@
                                                             
                                                             </div>
                                                     </div>
+<<<<<<< HEAD
                                                     {{-- <div class="row">
                                                         <div class="col-md-4" style="padding-left: 0rem; "> 
                                                             <div class="form-group">
@@ -484,6 +522,139 @@
         });
     </script>
 
+=======
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col pull-right text-left">
+                                <h3 class="mb-10 panel-title"></h3>
+                            </div>
+                            @if(isset($_GET['location']) && isset($_GET['start_date']) && isset($_GET['end_date']))
+                            @php
+                                $selectedLocationId = $_GET['location']; // Retrieve the selected location ID from URL parameter
+                                // Assuming $locations is the collection/array of all locations
+                                $selectedLocation = $locations->firstWhere('id', $selectedLocationId); // Find the selected location by ID
+                                $startDate = $_GET['start_date'];
+                                $endDate = $_GET['end_date'];
+                            @endphp
+                        
+                            <div class="schedule-header">
+                                @if($selectedLocation)
+                                    <p style="text-align: center; margin:1rem;">
+                                        <span style="font-weight: bold;">
+                                            Schedules for <span style="color:#2DCE89;"> {{ $selectedLocation->location }}</span> 
+                                            From <span style="color:#2DCE89;">{{ date('d-m-Y', strtotime($startDate)) }} </span> To <span style="color:#2DCE89;">{{ date('d-m-Y', strtotime($endDate)) }}
+                                        </span>
+                                    </p>
+                                @endif
+                        
+                                <div class="table-wrapper">
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th style="font-size: 12px; font-weight: bold">Date</th>
+                                                <th style="font-size: 12px; font-weight: bold">Utility</th>
+                                                
+                                                <!-- Headers for intervals -->
+                                                @foreach ($timeIntervals as $interval)
+                                                    @php
+                                                        [$startTime, $endTime] = explode(' - ', $interval); // Splitting start and end times
+                                                    @endphp
+                                                    <th style="padding-right: 0.5rem; padding-left:0.6rem; font-size: 12px; font-weight: bold">
+                                                        <div>{{ $startTime }} </div>
+                                                        <div>{{ $endTime }}</div>
+                                                    </th>
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $selectedDates = $selectedDates ?? []; // Initialize $selectedDates if it's undefined
+                                            @endphp
+                                            <!-- Rows for each date -->
+                                            @foreach ($selectedDates as $date)
+                                                <tr>
+                                                    <td>
+                                                        {{ date('d-m-Y', strtotime($date)) }} <br>
+                                                        {{ date('l', strtotime($date)) }}
+                                                    </td>
+                                                    @php
+                                                        // Initialize variables to hold occupied and unoccupied hours for each date
+                                                        $occupiedHours = 0;
+                                                        $unoccupiedHours = 0;
+                                                        $intervalOccupancy = []; // Array to store interval occupancy data
+                                                        $isWeekend = (date('N', strtotime($date)) >= 6); // Check if it's Saturday (6) or Sunday (7)
+                
+                                                    @endphp
+                                                    @foreach ($timeIntervals as $interval)
+                                                        @php
+                                                            $cellData = $occupancyData[$date][$interval] ?? null;
+                                                            $cellColor = $cellData['color'] ?? 'green'; // Default to green if data is not present
+                                                            // Calculate occupied and unoccupied hours based on cell color
+                                                            if ($cellColor === 'red') {
+                                                                $occupiedHours += 0.25; // Assuming each interval represents 15 minutes (0.25 hours)
+                                                            } else {
+                                                                $unoccupiedHours += 0.25;
+                                                            }
+                                                            // Store occupancy data for each interval
+                                                            $intervalOccupancy[] = [
+                                                                'color' => $cellColor,
+                                                                'details' => $cellData['details'] ?? '',
+                                                            ];
+                                                        @endphp
+                                                    @endforeach
+                                                    <!-- Display occupied and unoccupied hours before intervals -->
+                                                    <td> <span style= "color:red; font-weight:bold;">{{ $occupiedHours }} </span><span style="font-weight:bold";>-</span><span style= "color:#24A884; font-weight:bold;"> {{ $unoccupiedHours }}</span></td>
+                                                    
+                                                    <!-- Render intervals with cell coloring -->
+                                                    @foreach ($intervalOccupancy as $data)
+                                                    @php
+                                                        $cellColor = $data['color'];
+                                                        // If it's a weekend, change the cell color to black
+                                                        if ($isWeekend) {
+                                                            $cellColor = 'black';
+                                                        }
+                                                    @endphp
+                                                    <td style="background-color: {{ $cellColor }}" data-toggle="tooltip" title="{{ $data['details'] }}">
+                                                        <!-- If the cell is occupied (red), display a tooltip -->
+                                                        <!-- Tooltip will show the person's name and class -->
+                                                    </td>
+                                                @endforeach
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    @endif
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+    <!--   Core   -->
+    <script src="./js/plugins/jquery/dist/jquery.min.js"></script>
+    <script src="./js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!--   Optional JS   -->
+    <script src="./js/plugins/chart.js/dist/Chart.min.js"></script>
+    <script src="./js/plugins/chart.js/dist/Chart.extension.js"></script>
+    <!--   Argon JS   -->
+    <script src="./js/argon-dashboard.min.js?v=1.1.2"></script>
+    <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+    <script>
+        // Initialize Bootstrap tooltips
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
     <script>
     $(document).ready(function() {
         $('#filter_date').change(function() {

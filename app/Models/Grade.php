@@ -13,4 +13,8 @@ class Grade extends Model
     {
         return $this->belongsTo(Schedule::class);
     }
+    public function resource()
+    {
+        return $this->belongsTo(Resource::class);
+    }
 }

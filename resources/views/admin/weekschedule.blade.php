@@ -146,8 +146,24 @@
             </div>
             
             <div class="d-flex">
+<<<<<<< HEAD
                 <a class="btn btn-custom" href="{{url('/home')}}">
                     <i class="ni ni-single-02 text-yellow"></i> Home
+=======
+                <a class="btn btn-custom" href="{{url('/userhome')}}">
+                    <i class="ni ni-single-02 text-yellow"></i> Home
+                </a>
+                @hasanyrole(['admin','Superadmin'])
+            <a class="btn btn-custom mr-2" href="{{url('/modify')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i> Update Schedules
+            </a>
+            <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                <i class="ni ni-key-25 text-info"></i>User Information Adddition
+            </a>
+            @endhasanyrole
+                <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i> Person Activity
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
                 </a>
                
                 <a class="btn btn-custom mr-2" href="{{url('/classadmin')}}" target="_self">
@@ -155,13 +171,27 @@
                 </a>
                 <a class="btn btn-custom mr-2" href="{{url('/locationadmin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Campus Activity
+<<<<<<< HEAD
                 </a>
                 <a class="btn btn-custom mr-2" href=" {{url('/roles')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Location Activity
                 </a>
                 <a class="btn btn-custom mr-2" href="{{url('/admin')}}" target="_self">
                     <i class="ni ni-key-25 text-info"></i> Person Activity
+=======
                 </a>
+                <a class="btn btn-custom mr-2" href=" {{url('/roles')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Locations Activity
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
+                </a>
+                <a class="btn btn-custom mr-2 disabled" href="{{url('/getSchedules')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Monthly Schedule
+                </a>
+                @hasexactroles('user')
+                <a class="btn btn-custom mr-2" href="{{url('/mutable')}}" target="_self">
+                    <i class="ni ni-key-25 text-info"></i>Edit
+                </a>
+                @endhasexactroles
             </div>
         </div>
     </header>
@@ -172,7 +202,12 @@
             <div class="container-fluid">
                 <!-- Brand -->
                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+<<<<<<< HEAD
                     href="{{url('/admin')}}">Monthly Schedule Dashboard</a>
+=======
+                    href="">Monthly Schedule Dashboard</a>
+                    <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{{ Auth::user()->name }}</p>
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
             </div>
         </nav>
         <!-- End Navbar -->
@@ -270,8 +305,11 @@
                         @foreach($schedules->groupBy('date') as $date => $dateSchedules)
                             <tr>
                                 <td><b>{{ \Carbon\Carbon::parse($date)->format('M d, Y') }}</b></td>
+<<<<<<< HEAD
                                 <td><b>{{ \Carbon\Carbon::parse($date)->format('l') }}</b></td>
 
+=======
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
                                 @php
                                     $groupedSchedules = $dateSchedules->groupBy('time_from');
                                 @endphp

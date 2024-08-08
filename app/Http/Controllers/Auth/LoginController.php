@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Providers\RouteServiceProvider;
@@ -10,6 +11,7 @@ use Psy\Command\WhereamiCommand;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
+
 class LoginController extends Controller
 {
     /*
@@ -30,7 +32,10 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected function redirectTo()
+    {
+        return '/userhome';
+    }
 
     /**
      * Create a new controller instance.
@@ -43,7 +48,7 @@ class LoginController extends Controller
     }
     // public function showLoginForm($id)
     // {
-        
+
     // }
     public function username()
     {
@@ -51,28 +56,28 @@ class LoginController extends Controller
     }
 
     protected function authenticated(Request $request, $user)
-    {   
-        if(!$user->isActive) {
+    {
+        if (!$user->isActive) {
             Auth::logout();
-            return redirect('login')->with('success','You are not an active User');
-            }
-            // $user->application_id = $request->input('application_id');
-            // $user->save();   
+            return redirect('login')->with('success', 'You are not an active User');
+        }
+        // $user->application_id = $request->input('application_id');
+        // $user->save();   
     }
-    
+
 
     public function getUserDetails($id)
     {
         //   $user = User::where('userID','=',$id)->first();
         // return response()->json($user);
         $user = DB::table('users')
-                    ->join('department', 'users.dep_id', '=', 'department.id')
-                    ->select('users.name', 'users.email', 'users.designation','department.name as dep_name', )
-                    ->where('users.userID', $id)
-                    ->first();
+            ->join('department', 'users.dep_id', '=', 'department.id')
+            ->select('users.name', 'users.email', 'users.designation', 'department.name as dep_name', )
+            ->where('users.userID', $id)
+            ->first();
 
-    return response()->json($user);
-        
+        return response()->json($user);
+
     }
-    
+
 }

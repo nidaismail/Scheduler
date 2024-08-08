@@ -13,42 +13,68 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
 <script>
     $(document).ready(function() {
-      $('#togglePassword').click(function() {
-        var passwordInput = $('#password');
-        var type = passwordInput.attr('type');
-        
-        if (type === 'password') {
-          passwordInput.attr('type', 'text');
-          $(this).removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-          passwordInput.attr('type', 'password');
-          $(this).removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-      });
-    // });
+        // Toggle password visibility
+        $('#togglePassword').click(function() {
+            var passwordInput = $('#password');
+            var type = passwordInput.attr('type');
+            
+            if (type === 'password') {
+                passwordInput.attr('type', 'text');
+                $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+
+        // Check if the user is already logged in
+        @if(Auth::check())
+            $('#userID').on('change', function() {
+                var id = $(this).val();
+                if (id) {
+                    // Alert the user that they are already logged in
+                    var userName = '{{ Auth::user()->name }}';
+                    alert('You are already logged in as ' + userName + ' Please Click the Home button in the right Corner');
+                    // Focus remains on the userID field
+                    $(this).focus();
+                }
+            });
+        @endif
+
+        // AJAX call to fetch user details based on user ID
         $('#userID').on('change', function() {
             var id = $(this).val();
             if (id) {
                 $.ajax({
                     type: "GET",
                     url: "/get-user-details/" + id,
-                    
                     success: function(data) {
-                        $('#name').val(data.name);
-                        $('#email').val(data.email);
-                        $('#designation').val(data.designation);
-                        $('#dep_name').val(data.dep_name);
+                        $('#name').val(data.name).prop('disabled', true); // Populate and disable other fields
+                        $('#email').val(data.email).prop('disabled', true);
+                        $('#designation').val(data.designation).prop('disabled', true);
+                        $('#dep_name').val(data.dep_name).prop('disabled', true);
+                        $('#password').focus(); // Shift focus to the password field
                     }
                 });
             } else {
-                        $('#name').val('');
-                        $('#email').val('');
-                        $('#designation').val('');
-                        $('#dep_id').val('');
+                $('#name').val('');
+                $('#email').val('');
+                $('#designation').val('');
+                $('#dep_id').val('');
             }
         });
     });
 </script>
+
+
+<style>
+    @media only screen and (max-width: 768px) {
+    .signin-image{
+        display: none;
+    }
+  /* Your CSS styles for mobile devices */
+}
+</style>
 @endpush
  
 @section('content')
@@ -136,7 +162,7 @@
                         </div> 
                         <div class="form-group">
                             <label for="password"><i class="zmdi zmdi-lock"></i></label>
-                            <input id="password" type="password" placeholder="Your Passowrd" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" autofocud>
+                            <input id="password" type="password" placeholder="Your Password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" autofocus>
                             <div class="col-md-6">
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -194,4 +220,26 @@
   </script>
 @endpush --}}
 @endsection
+@prepend('scripts')
+    @if(Auth::check())
+        <script>
+            $(document).ready(function() {
+                $('#userID').on('change', function() {
+                    console.log('Key pressed:', event.key);
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent the form from submitting
+                        
+                        // Check if the userID field is empty
+                        if ($(this).val().trim() === '') {
+                            var userName = '{{ Auth::user()->name }}';
+                            alert('You are already logged in as ' + userName);
+                        }
+                    }
+                });
+            });
+        </script>
+    @endif
+
+@endprepend()
+
 

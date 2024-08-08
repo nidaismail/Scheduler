@@ -48,70 +48,26 @@ class HomeController extends Controller
         });
 
         // $supervisor = Auth::user()->
-        return view('admin.home')->with('activities', $activities)
+        return view('home')->with('activities', $activities)
             ->with('locations', $locations)
             ->with('clas', $clas)
             ->with('persons', $persons)
             ->with('defaultActivityId', $defaultActivityId);
     }
-    public function userindex()
-    {
-        $persons = User::all()->sortBy(function ($person) {
-            return $person->name;
-        });
-        $user = Auth::user();
-        return view('userHome', compact('user', 'persons'));
-    }
-
     public function store(Request $request)
     {
         try {
-<<<<<<< HEAD
-            $activityId = $request->input('activity');
-            $isCheckboxVisible = $activityId === 2 || $activityId === 5;
-
-            $locations = array_filter($request->input('location', []), fn($loc) => $loc != 0);
-
-            if ($isCheckboxVisible) {
-                // Validate checkbox field
-                if (empty($locations)) {
-                    return redirect()->back()->with('error', 'Please select at least one location.')->withInput();
-                }
-            } else {
-                // Validate select field
-                if (empty($locations)) {
-                    return redirect()->back()->with('error', 'Please select a location.')->withInput();
-                }
-            }
-            $selectedPersonIds = $request->input('persons', []);
-
-
-            // Check if at least one person and one location is selected
-=======
             $selectedPersonIds = $request->input('persons', []);
             // Check if at least one person is selected
->>>>>>> e905996f0d85753db0090882a3740de079a99306
             if (empty($selectedPersonIds)) {
                 $error = 'Please select at least one person.';
                 return redirect()->back()->with('error', $error)->withInput();
             }
-<<<<<<< HEAD
-            if (empty($locations)) {
-                $error = 'Please select at least one location.';
-                return redirect()->back()->with('error', $error)->withInput();
-            }
-
-=======
->>>>>>> e905996f0d85753db0090882a3740de079a99306
             $selectedClass = $request->input('class');
             if (empty($selectedClass)) {
                 $error = 'Please select a class.';
                 return redirect()->back()->with('error', $error)->withInput();
             }
-<<<<<<< HEAD
-
-=======
->>>>>>> e905996f0d85753db0090882a3740de079a99306
             // Validate the request data
             $request->validate([
                 'start_date' => 'required|date',
@@ -123,15 +79,9 @@ class HomeController extends Controller
                 'class' => 'required',
                 'day' => 'required|array',
                 'activity' => 'required|integer',
-                'location' => 'array',
-                'location.*' => 'integer',
+                'location' => 'required|integer',
                 'remarks' => 'string|nullable',
             ]);
-<<<<<<< HEAD
-            \Log::info('Request Data:', $request->all());
-
-=======
->>>>>>> e905996f0d85753db0090882a3740de079a99306
             // Prepare schedule data
             $startDate = new DateTime($request->start_date);
             $endDate = new DateTime($request->end_date);
@@ -144,33 +94,6 @@ class HomeController extends Controller
             $eightAM = Carbon::createFromFormat('H:i', '08:00');
             $threePM = Carbon::createFromFormat('H:i', '15:00');
 
-<<<<<<< HEAD
-            // Check for conflicting schedules for each selected location
-            foreach ($locations as $locationId) {
-                foreach ($period as $date) {
-                    if (in_array($date->format('l'), $request->day)) {
-                        // Check time frame
-                        if ($startTime >= $eightAM && $endTime <= $threePM) {
-                            // Check for conflicting schedules
-                            $existingSchedules = Schedule::where('location_id', $locationId)
-                                ->where('date', $date->format('Y-m-d'))
-                                ->where(function ($query) use ($startTime, $endTime) {
-                                    $query->whereBetween('time_from', [$startTime, $endTime])
-                                        ->orWhereBetween('time_to', [$startTime, $endTime])
-                                        ->orWhere(function ($query) use ($startTime, $endTime) {
-                                            $query->where('time_from', '<', $startTime)
-                                                ->where('time_to', '>', $endTime);
-                                        });
-                                })
-                                ->exists();
-
-                            if ($existingSchedules) {
-                                return redirect()->back()->with('error', 'One or more locations are already booked for the selected time frame.')->withInput();
-                            }
-                        } else {
-                            return redirect()->back()->with('error', 'The time frame should be between 8 AM and 3 PM.')->withInput();
-                        }
-=======
             // Check for conflicting schedules for the given time frame and location
             foreach ($period as $date) {
                 if (in_array($date->format('l'), $request->day)) {
@@ -182,7 +105,6 @@ class HomeController extends Controller
                         // Check for conflicting schedules
                         $existingSchedules = Schedule::where('location_id', $locationId)
                             ->where('date', $date->format('Y-m-d'))
-                            ->where('admissible', 0)
                             ->where(function ($query) use ($startTime, $endTime) {
                                 $query->whereBetween('time_from', [$startTime, $endTime])
                                     ->orWhereBetween('time_to', [$startTime, $endTime])
@@ -194,11 +116,11 @@ class HomeController extends Controller
                             ->exists();
 
                         if ($existingSchedules) {
-                            return redirect()->back()->with('error', 'Location is already booked for the selected time frame.')->withInput();
+                            return redirect()->back()->with('error', 'Location is already booked for the selected time frame.');
                         }
                     } else {
                         // If the time frame is outside 8 AM - 3 PM, handle accordingly (e.g., show error or set a default value)
-                        return redirect()->back()->with('error', 'The time frame should be between 8 AM and 3 PM.')->withInput();
+                        return redirect()->back()->with('error', 'The time frame should be between 8 AM and 3 PM.');
                     }
                 }
             }
@@ -220,59 +142,10 @@ class HomeController extends Controller
                         $data->location_id = $request->location;
                         $data->remarks = $request->remarks;
                         $data->save();
->>>>>>> e905996f0d85753db0090882a3740de079a99306
                     }
                 }
             }
 
-<<<<<<< HEAD
-            // If no conflicting schedules, proceed to create schedules for all selected persons and locations
-            foreach ($selectedPersonIds as $selectedPersonId) {
-                foreach ($locations as $locationId) {
-                    foreach ($period as $date) {
-                        if (in_array($date->format('l'), $request->day)) {
-                            $data = new Schedule();
-                            $data->date = $date;
-                            $data->time_from = $request->start_time;
-                            $data->time_to = $request->end_time;
-                            $data->day = $date->format('l');
-                            $data->user_id = $selectedPersonId;
-                            $data->department = Auth::user()->dep_id;
-                            $data->class_id = $request->class;
-                            $data->activity_id = $request->activity;
-                            $data->location_id = $locationId;
-                            $data->remarks = $request->remarks;
-                            $data->save();
-                        }
-                    }
-                }
-            }
-
-            return redirect()->back()->with('success', 'Schedules added successfully');
-        } catch (QueryException $e) {
-            return redirect()->back()->with('error', 'Failed to save schedules. Please try again later.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An unexpected error occurred. Please try again later.');
-        }
-    }
-
-    public function checkLocationAvailability(Request $request)
-    {
-        $locationId = $request->input('location_id');
-        $startDate = Carbon::createFromFormat('Y-m-d', $request->input('start_date'));
-        $endDate = Carbon::createFromFormat('Y-m-d', $request->input('end_date'));
-        $startTime = Carbon::createFromFormat('H:i:s', $request->input('start_time'));
-        $endTime = Carbon::createFromFormat('H:i:s', $request->input('end_time'));
-
-        $isLocationAvailable = Schedule::where('location_id', $locationId)
-            ->where(function ($query) use ($startDate, $endDate, $startTime, $endTime) {
-                $query->whereBetween('date', [$startDate, $endDate]);
-            })
-            ->orWhere(function ($query) use ($startTime, $endTime) {
-                $query->whereTime('time_from', '<', $endTime)
-                    ->whereTime('time_to', '>', $startTime);
-
-=======
             return redirect()->back()->with('success', 'Schedule added Successfully');
         } catch (QueryException $e) {
             // If there's an error with the database query
@@ -298,7 +171,6 @@ class HomeController extends Controller
                 $query->whereTime('time_from', '<', $endTime)
                     ->whereTime('time_to', '>', $startTime);
 
->>>>>>> e905996f0d85753db0090882a3740de079a99306
             })->get();// query database to check if the location is available during the specified time frame
 
         if ($isLocationAvailable) {

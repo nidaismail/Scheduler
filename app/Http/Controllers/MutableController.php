@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
+=======
+use Illuminate\Support\Facades\Auth;
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
 use Illuminate\Support\Facades\Log;
 use App\Models\Grade;
 use App\Models\Schedule;
@@ -22,6 +26,10 @@ class MutableController extends Controller
         // Fetch schedules based on the selected class, date range, and location
         $schedulesQuery = Schedule::with(['user', 'activity', 'class', 'location'])
             ->whereBetween('date', [$startDate, $endDate])
+<<<<<<< HEAD
+=======
+            ->where('admissible', '=', 0)
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
             ->orderBy('date')
             ->orderBy('time_from');
 
@@ -40,10 +48,34 @@ class MutableController extends Controller
         // Fetch schedules based on the modified query
         $schedules = $schedulesQuery->get();
 
+<<<<<<< HEAD
 
         $locations = Location::all()->sortBy('location');
         $classes = Grade::all()->sortBy('class');
         $users = User::all()->sortBy('user');
+=======
+        $loggedInUser = Auth::user();
+        $loggedInUser->load('roles');
+
+        // Determine if the user is an admin or superadmin
+        $isAdmin = $loggedInUser->roles->contains('name', 'admin');
+        $isSuperadmin = $loggedInUser->roles->contains('name', 'Superadmin');
+
+        // Fetch users based on roles and department
+        if ($isAdmin || $isSuperadmin) {
+            $users = User::all()->sortBy('name');
+        } else {
+            $users = User::where('dep_id', $loggedInUser->dep_id)->get()->sortBy('name');
+        }
+        // $roleNames = $loggedInUser->roles->pluck('name')->toArray();
+        // Log::info('Logged-in user roles:', $roleNames);
+        // // Debug: Log the roles and fetched users
+        // \Log::info('Logged-in user role: ' . $loggedInUser->role);
+        // \Log::info('Fetched users count: ' . $users->count());
+
+        $locations = Location::all()->sortBy('location');
+        $classes = Grade::all()->sortBy('class');
+>>>>>>> e905996f0d85753db0090882a3740de079a99306
         $activities = Schedule::all()->sortBy('activity');
 
         // Pass the schedules to the view
