@@ -1,13 +1,42 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Employee Scheduling System
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is the project to create manage and monitor employee schedules in an organisation. The application enables an employee to add schedules view schedules and edit schedules. Moreover, the application enables the admins to view and monitor overall campus activity in different dashboards. 
 
-Employee Scheduling System
-This system is based on laravel that can be used to manage and monitor employee activities. 
+## Table of contents
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- [Screenshot](#screenshot)
+- [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+- [Author](#author)
+
+
+### Screenshot
+
+![](./home.png)
+
+### Links
+
+- Solution URL: [Github](https://github.com/nidaismail/Scheduler)
+- Live Site URL: [Cloud](https://scheduler.imdcollege.edu.pk/)
+
+## My process
+
+The project is made using laravel, firstly i set up all the view files then the controller files then models along with the tables in mySQL.
+
+### Built with
+
+- PHP (Laravel)
+- HTML
+- CSS
+- JS
+- JSON
+- MySQL
+  
+### What I learned
+This was my first project with laravel
+
+## Author
+
+- Nida Ismail
